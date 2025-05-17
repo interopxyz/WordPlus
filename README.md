@@ -7,7 +7,7 @@ _Like Word+ [Buy me a coffee :D](http://www.buymeacoffee.com/davidmans)_
 
 This plugin for Grasshopper 3d makes it simple to construct Microsoft Word documents without the need to have Word installed. Build Rich Text, Tables, Charts, and Image content into Word Documents and save to a File or write to a Memory Stream. It is built on top of OfficeImo. Built on top of [OfficeImo](https://github.com/EvotecIT/OfficeIMO)
 
-[Download Plugin at Food4Rhino](https://www.food4rhino.com/en/app/excel)
+[Download Plugin at Food4Rhino](https://www.food4rhino.com/en/app/word)
 
 
 ## Learn More
