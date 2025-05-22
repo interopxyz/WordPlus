@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_Merge : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_Merge class.
         /// </summary>
         public GH_WD_Doc_Merge()
-          : base("Merge Documents", "WD Merge",
-              "Sequentially merge Documents into a single document and return document contents",
+          : base("Merge Word Documents", "WD Merge",
+              "Sequentially merge Word Documents into a single document and return document contents",
               Constants.ShortName, Constants.SubDocument)
         {
         }

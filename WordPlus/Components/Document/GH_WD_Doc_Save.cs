@@ -13,8 +13,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public GH_WD_Doc_Save()
-          : base("Save Document", "Save Doc",
-              "Save a Document to a local file",
+          : base("Save Word Document", "WD Save Doc",
+              "Save a Word Document to a local file",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -90,7 +90,7 @@ namespace WordPlus.Components
 
                     string path = Path.Combine(directory, name + ".docx");
 
-                    document.SaveDocument(path);
+                    document.Save(path);
                     DA.SetData(0, path);
                 }
             }

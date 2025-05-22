@@ -13,8 +13,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WD_Doc_PageA class.
         /// </summary>
         public GH_WD_Doc_PageA()
-          : base("Iso A Pages", "IsoA",
-              "Create a Document from a standard Iso A Paper Size",
+          : base("Iso A Word Pages", "WD IsoA",
+              "Create a Word Document from a standard Iso A Paper Size",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -32,7 +32,7 @@ namespace WordPlus.Components
             pManager[2].Optional = true;
 
             Param_Integer paramA = (Param_Integer)pManager[0];
-            foreach (WdPage.SizesIsoA value in Enum.GetValues(typeof(WdPage.SizesIsoA)))
+            foreach (Page.SizesIsoA value in Enum.GetValues(typeof(Page.SizesIsoA)))
             {
                 paramA.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -42,7 +42,7 @@ namespace WordPlus.Components
             paramB.AddNamedValue("Landscape", 1);
 
             Param_Integer paramC = (Param_Integer)pManager[2];
-            foreach (WdPage.Margins value in Enum.GetValues(typeof(WdPage.Margins)))
+            foreach (Page.Margins value in Enum.GetValues(typeof(Page.Margins)))
             {
                 paramC.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -68,14 +68,14 @@ namespace WordPlus.Components
             DA.GetData(0, ref type);
 
             WdDocument document = new WdDocument();
-            document.Page = WdPage.IsoA((WdPage.SizesIsoA)type);
+            document.Page = Page.IsoA((Page.SizesIsoA)type);
 
             int orientation = 0;
             DA.GetData(1, ref orientation);
-            if (orientation != 0) document.Page.Orientation = WdPage.Orientations.Landscape;
+            if (orientation != 0) document.Page.Orientation = Page.Orientations.Landscape;
 
             int margin = 0;
-            if(DA.GetData(2, ref margin)) document.Page.SetMargin((WdPage.Margins)margin);
+            if(DA.GetData(2, ref margin)) document.Page.SetMargin((Page.Margins)margin);
 
             DA.SetData(0, document);
         }

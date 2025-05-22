@@ -13,8 +13,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public GH_WD_Con_BreakLine()
-          : base("Line Break Contents", "LineBrk",
-              "Construct a Line Break Content Object",
+          : base("Word Line Break Contents", "WD Ln Brk",
+              "Construct a Word Line Break Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -53,7 +53,7 @@ namespace WordPlus.Components
             int type = 2;
             DA.GetData(0, ref type);
 
-            WdContent content = WdContent.CreateHorizontalLineContent();
+            Content content = Content.CreateHorizontalLineContent();
             content.Graphic.LineType = (Graphic.LineTypes)type;
 
             DA.SetData(0, content);

@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Modify
+namespace WordPlus.Components
 {
     public class GH_WD_Con_Mod_Borders : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Modify
         /// Initializes a new instance of the GH_WD_Con_Mod_Borders class.
         /// </summary>
         public GH_WD_Con_Mod_Borders()
-          : base("Content Borders", "ConBorders",
-              "Modify Content Borders if applicable",
+          : base("Word Content Borders", "WD ConBorders",
+              "Modify Word Content Borders if applicable",
               Constants.ShortName, Constants.Modify)
         {
         }
@@ -64,7 +64,7 @@ namespace WordPlus.Components.Modify
             bool left = false;
             bool right = false;
 
-            if (gooA.TryGetFragment(out WdFragment fragment))
+            if (gooA.TryGetFragment(out Fragment fragment))
             {
                 if (DA.GetData(1, ref top)) fragment.Graphic.TopBorder = top;
                 if (DA.GetData(2, ref bottom)) fragment.Graphic.BottomBorder = bottom;
@@ -77,12 +77,12 @@ namespace WordPlus.Components.Modify
                 DA.SetData(3, fragment.Graphic.LeftBorder);
                 DA.SetData(4, fragment.Graphic.RightBorder);
             }
-            else if (gooA.TryGetParagraph(out WdParagraph paragraph))
+            else if (gooA.TryGetParagraph(out Paragraph paragraph))
             {
-                if (DA.GetData(1, ref top)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.TopBorder = top;
-                if (DA.GetData(2, ref bottom)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.BottomBorder = bottom;
-                if (DA.GetData(3, ref left)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.LeftBorder = left;
-                if (DA.GetData(4, ref right)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.RightBorder = right;
+                if (DA.GetData(1, ref top)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.TopBorder = top;
+                if (DA.GetData(2, ref bottom)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.BottomBorder = bottom;
+                if (DA.GetData(3, ref left)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.LeftBorder = left;
+                if (DA.GetData(4, ref right)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.RightBorder = right;
 
                 DA.SetData(0, paragraph);
                 DA.SetData(1, paragraph.Fragments[0].Graphic.TopBorder);
@@ -90,7 +90,7 @@ namespace WordPlus.Components.Modify
                 DA.SetData(3, paragraph.Fragments[0].Graphic.LeftBorder);
                 DA.SetData(3, paragraph.Fragments[0].Graphic.RightBorder);
             }
-            else if (gooA.TryGetContent(out WdContent content))
+            else if (gooA.TryGetContent(out Content content))
             {
                 if (DA.GetData(1, ref top)) content.Graphic.TopBorder = top;
                 if (DA.GetData(2, ref bottom)) content.Graphic.BottomBorder = bottom;

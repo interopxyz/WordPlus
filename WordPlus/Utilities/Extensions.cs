@@ -35,31 +35,31 @@ namespace WordPlus
             }
         }
 
-        public static WD.WordListStyle ToImo(this WdContent.BulletPoints input)
+        public static WD.WordListStyle ToImo(this Content.BulletPoints input)
         {
             switch (input)
             {
                 default:
                     return WD.WordListStyle.Bulleted;
-                case WdContent.BulletPoints.ArticleSections:
+                case Content.BulletPoints.ArticleSections:
                     return WD.WordListStyle.ArticleSections;
-                case WdContent.BulletPoints.BulletedChars:
+                case Content.BulletPoints.BulletedChars:
                     return WD.WordListStyle.BulletedChars;
-                case WdContent.BulletPoints.Chapters:
+                case Content.BulletPoints.Chapters:
                     return WD.WordListStyle.Chapters;
-                case WdContent.BulletPoints.Numbered_1ai:
+                case Content.BulletPoints.Numbered_1ai:
                     return WD.WordListStyle.Heading1ai;
-                case WdContent.BulletPoints.Numbered_111:
+                case Content.BulletPoints.Numbered_111:
                     return WD.WordListStyle.Headings111;
-                case WdContent.BulletPoints.Numbered_Tabbed_111:
+                case Content.BulletPoints.Numbered_Tabbed_111:
                     return WD.WordListStyle.Headings111Shifted;
-                case WdContent.BulletPoints.LetteredBracket:
+                case Content.BulletPoints.LetteredBracket:
                     return WD.WordListStyle.LowerLetterWithBracket;
-                case WdContent.BulletPoints.Lettered:
+                case Content.BulletPoints.Lettered:
                     return WD.WordListStyle.UpperLetterWithBracket;
-                case WdContent.BulletPoints.LetteredDot:
+                case Content.BulletPoints.LetteredDot:
                     return WD.WordListStyle.UpperLetterWithDot;
-                case WdContent.BulletPoints.Lettered_IA1:
+                case Content.BulletPoints.Lettered_IA1:
                     return WD.WordListStyle.HeadingIA1;
             }
         }
@@ -118,17 +118,17 @@ namespace WordPlus
             }
         }
 
-        public static DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues ToOpenXml(this WdContent.LegendLocations input)
+        public static DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues ToOpenXml(this Content.LegendLocations input)
         {
             switch (input)
             {
                 default:
                     return DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues.Bottom;
-                case WdContent.LegendLocations.Left:
+                case Content.LegendLocations.Left:
                     return DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues.Left;
-                case WdContent.LegendLocations.Right:
+                case Content.LegendLocations.Right:
                     return DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues.Right;
-                case WdContent.LegendLocations.Top:
+                case Content.LegendLocations.Top:
                     return DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues.Top;
             }
         }
@@ -190,10 +190,10 @@ namespace WordPlus
 
         #region cloning
 
-        public static List<WdContent> Duplicate(this List<WdContent> input)
+        public static List<Content> Duplicate(this List<Content> input)
         {
-            List<WdContent> output = new List<WdContent>();
-            foreach (WdContent item in input) output.Add(new WdContent(item));
+            List<Content> output = new List<Content>();
+            foreach (Content item in input) output.Add(new Content(item));
 
             return output;
         }
@@ -208,62 +208,62 @@ namespace WordPlus
             return output;
         }
 
-        public static List<string> DuplicateAsText(this List<WdFragment> input)
+        public static List<string> DuplicateAsText(this List<Fragment> input)
         {
             List<string> output = new List<string>();
-            foreach (WdFragment item in input)
+            foreach (Fragment item in input)
             {
                 output.Add(item.Text);
             }
             return output;
         }
 
-        public static List<string> DuplicateAsText(this List<WdParagraph> input)
+        public static List<string> DuplicateAsText(this List<Paragraph> input)
         {
             List<string> output = new List<string>();
-            foreach (WdParagraph item in input)
+            foreach (Paragraph item in input)
             {
                 output.Add(item.Text);
             }
             return output;
         }
 
-        public static List<WdParagraph> Duplicate(this List<WdParagraph> input)
+        public static List<Paragraph> Duplicate(this List<Paragraph> input)
         {
-            List<WdParagraph> output = new List<WdParagraph>();
-            foreach (WdParagraph item in input)
+            List<Paragraph> output = new List<Paragraph>();
+            foreach (Paragraph item in input)
             {
-                output.Add(new WdParagraph(item));
+                output.Add(new Paragraph(item));
             }
             return output;
         }
 
-        public static List<WdFragment> Duplicate(this List<WdFragment> input)
+        public static List<Fragment> Duplicate(this List<Fragment> input)
         {
-            List<WdFragment> output = new List<WdFragment>();
-            foreach (WdFragment item in input)
+            List<Fragment> output = new List<Fragment>();
+            foreach (Fragment item in input)
             {
-                output.Add(new WdFragment(item));
+                output.Add(new Fragment(item));
             }
             return output;
         }
 
-        public static List<WdFragment> DuplicateAsFragments(this List<string> input)
+        public static List<Fragment> DuplicateAsFragments(this List<string> input)
         {
-            List<WdFragment> output = new List<WdFragment>();
+            List<Fragment> output = new List<Fragment>();
             foreach (string item in input)
             {
-                output.Add(new WdFragment(item));
+                output.Add(new Fragment(item));
             }
             return output;
         }
 
-        public static List<WdParagraph> DuplicateAsParagraphs(this List<string> input)
+        public static List<Paragraph> DuplicateAsParagraphs(this List<string> input)
         {
-            List<WdParagraph> output = new List<WdParagraph>();
+            List<Paragraph> output = new List<Paragraph>();
             foreach (string item in input)
             {
-                output.Add(new WdParagraph(item));
+                output.Add(new Paragraph(item));
             }
             return output;
         }
@@ -303,28 +303,28 @@ namespace WordPlus
             return output;
         }
 
-        public static List<List<WdFragment>> Duplicate(this List<List<WdFragment>> input)
+        public static List<List<Fragment>> Duplicate(this List<List<Fragment>> input)
         {
-            List<List<WdFragment>> output = new List<List<WdFragment>>();
-            foreach (List<WdFragment> items in input)
+            List<List<Fragment>> output = new List<List<Fragment>>();
+            foreach (List<Fragment> items in input)
             {
-                List<WdFragment> outputA = new List<WdFragment>();
-                foreach (WdFragment item in items)
+                List<Fragment> outputA = new List<Fragment>();
+                foreach (Fragment item in items)
                 {
-                    outputA.Add(new WdFragment(item));
+                    outputA.Add(new Fragment(item));
                 }
                 output.Add(outputA);
             }
            return output;
         }
 
-        public static List<List<string>> DuplicateAsText(this List<List<WdFragment>> input)
+        public static List<List<string>> DuplicateAsText(this List<List<Fragment>> input)
         {
             List<List<string>> output = new List<List<string>>();
-            foreach (List<WdFragment> items in input)
+            foreach (List<Fragment> items in input)
             {
                 List<string> outputA = new List<string>();
-                foreach (WdFragment item in items)
+                foreach (Fragment item in items)
                 {
                     outputA.Add(item.Text);
                 }
@@ -333,43 +333,43 @@ namespace WordPlus
             return output;
         } 
 
-        public static List<List<WdFragment>> DuplicateAsFragments(this List<List<string>> input)
+        public static List<List<Fragment>> DuplicateAsFragments(this List<List<string>> input)
         {
-            List<List<WdFragment>> output = new List<List<WdFragment>>();
+            List<List<Fragment>> output = new List<List<Fragment>>();
             foreach (List<string> items in input)
             {
-                List<WdFragment> outputA = new List<WdFragment>();
+                List<Fragment> outputA = new List<Fragment>();
                 foreach (string item in items)
                 {
-                    outputA.Add(new WdFragment(item));
+                    outputA.Add(new Fragment(item));
                 }
                 output.Add(outputA);
             }
             return output;
         }
 
-        public static List<List<WdParagraph>> Duplicate(this List<List<WdParagraph>> input)
+        public static List<List<Paragraph>> Duplicate(this List<List<Paragraph>> input)
         {
-            List<List<WdParagraph>> output = new List<List<WdParagraph>>();
-            foreach (List<WdParagraph> items in input)
+            List<List<Paragraph>> output = new List<List<Paragraph>>();
+            foreach (List<Paragraph> items in input)
             {
-                List<WdParagraph> outputA = new List<WdParagraph>();
-                foreach (WdParagraph item in items)
+                List<Paragraph> outputA = new List<Paragraph>();
+                foreach (Paragraph item in items)
                 {
-                    outputA.Add(new WdParagraph(item));
+                    outputA.Add(new Paragraph(item));
                 }
                 output.Add(outputA);
             }
             return output;
         }
 
-        public static List<List<string>> DuplicateAsText(this List<List<WdParagraph>> input)
+        public static List<List<string>> DuplicateAsText(this List<List<Paragraph>> input)
         {
             List<List<string>> output = new List<List<string>>();
-            foreach (List<WdParagraph> items in input)
+            foreach (List<Paragraph> items in input)
             {
                 List<string> outputA = new List<string>();
-                foreach (WdParagraph item in items)
+                foreach (Paragraph item in items)
                 {
                     outputA.Add(item.Text);
                 }
@@ -378,46 +378,46 @@ namespace WordPlus
             return output;
         }
 
-        public static List<List<WdParagraph>> DuplicateAsParagraphs(this List<List<string>> input)
+        public static List<List<Paragraph>> DuplicateAsParagraphs(this List<List<string>> input)
         {
-            List<List<WdParagraph>> output = new List<List<WdParagraph>>();
+            List<List<Paragraph>> output = new List<List<Paragraph>>();
             foreach (List<string> items in input)
             {
-                List<WdParagraph> outputA = new List<WdParagraph>();
+                List<Paragraph> outputA = new List<Paragraph>();
                 foreach (string item in items)
                 {
-                    outputA.Add(new WdParagraph(item));
+                    outputA.Add(new Paragraph(item));
                 }
                 output.Add(outputA);
             }
             return output;
         }
 
-        public static List<List<WdContent>> DuplicateAsContents(this List<List<string>> input)
+        public static List<List<Content>> DuplicateAsContents(this List<List<string>> input)
         {
-            List<List<WdContent>> output = new List<List<WdContent>>();
+            List<List<Content>> output = new List<List<Content>>();
             foreach (List<string> items in input)
             {
-                List<WdContent> outputA = new List<WdContent>();
+                List<Content> outputA = new List<Content>();
                 foreach (string item in items)
                 {
-                    outputA.Add(WdContent.CreateTextContent(item));
+                    outputA.Add(Content.CreateTextContent(item));
                 }
                 output.Add(outputA);
             }
             return output;
         }
 
-        public static List<List<WdContent>> Duplicate(this List<List<WdContent>> input)
+        public static List<List<Content>> Duplicate(this List<List<Content>> input)
         {
-            List<List<WdContent>> output = new List<List<WdContent>>();
+            List<List<Content>> output = new List<List<Content>>();
 
-            foreach(List<WdContent> contents in input)
+            foreach(List<Content> contents in input)
             {
-                List<WdContent> temp = new List<WdContent>();
-                foreach(WdContent content in contents)
+                List<Content> temp = new List<Content>();
+                foreach(Content content in contents)
                 {
-                    temp.Add(new WdContent(content));
+                    temp.Add(new Content(content));
                 }
                 output.Add(temp);
             }
@@ -458,104 +458,105 @@ namespace WordPlus
 
         #region casting
 
-        public static bool TryCastToParagraph(this IGH_Goo input, out WdParagraph paragraph)
+        public static bool TryCastToParagraph(this IGH_Goo input, out Paragraph paragraph)
         {
-            if (input.CastTo<WdParagraph>(out WdParagraph paragraph1))
+            if (input.CastTo<Paragraph>(out Paragraph paragraph1))
             {
-                paragraph = new WdParagraph(paragraph1);
+                paragraph = new Paragraph(paragraph1);
                 return true;
             }
             paragraph = null;
             return false;
 
         }
-        public static bool TryGetParagraph(this IGH_Goo input, out WdParagraph paragraph)
+
+        public static bool TryGetParagraph(this IGH_Goo input, out Paragraph paragraph)
         {
-            if (input.CastTo<WdParagraph>(out WdParagraph paragraph1))
+            if (input.CastTo<Paragraph>(out Paragraph paragraph1))
             {
-                paragraph = new WdParagraph(paragraph1);
+                paragraph = new Paragraph(paragraph1);
                 return true;
             }
-            else if (input.CastTo<WdFragment>(out WdFragment fragment1))
+            else if (input.CastTo<Fragment>(out Fragment fragment1))
             {
-                paragraph = new WdParagraph(fragment1);
+                paragraph = new Paragraph(fragment1);
                 return true;
             }
             else if (input.CastTo<string>(out string text))
             {
-                paragraph = new WdParagraph(text);
+                paragraph = new Paragraph(text);
                 return true;
             }
             else if (input.CastTo<double>(out double number))
             {
-                paragraph = new WdParagraph(number.ToString());
+                paragraph = new Paragraph(number.ToString());
                 return true;
             }
             else if (input.CastTo<int>(out int integer))
             {
-                paragraph = new WdParagraph(integer.ToString());
+                paragraph = new Paragraph(integer.ToString());
                 return true;
             }
             paragraph = null;
             return false;
         }
 
-        public static bool TryGetFragment(this IGH_Goo input, out WdFragment fragment)
+        public static bool TryGetFragment(this IGH_Goo input, out Fragment fragment)
         {
-            if (input.CastTo<WdFragment>(out WdFragment fragment1))
+            if (input.CastTo<Fragment>(out Fragment fragment1))
             {
-                fragment = new WdFragment(fragment1);
+                fragment = new Fragment(fragment1);
                 return true;
             }
             else if (input.CastTo<string>(out string text))
             {
-                fragment = new WdFragment(text);
+                fragment = new Fragment(text);
                 return true;
             }
             else if (input.CastTo<double>(out double number))
             {
-                fragment = new WdFragment(number.ToString());
+                fragment = new Fragment(number.ToString());
                 return true;
             }
             else if (input.CastTo<int>(out int integer))
             {
-                fragment = new WdFragment(integer.ToString());
+                fragment = new Fragment(integer.ToString());
                 return true;
             }
             fragment = null;
             return false;
         }
 
-        public static bool TryGetContent(this IGH_Goo input, out WdContent content)
+        public static bool TryGetContent(this IGH_Goo input, out Content content)
         {
-            if (input.CastTo<WdContent>(out WdContent content1))
+            if (input.CastTo<Content>(out Content content1))
             {
-                content = new WdContent(content1);
+                content = new Content(content1);
                 return true;
             }
-            else if (input.CastTo<WdParagraph>(out WdParagraph paragraph))
+            else if (input.CastTo<Paragraph>(out Paragraph paragraph))
             {
-                content = WdContent.CreateTextContent(paragraph);
+                content = Content.CreateTextContent(paragraph);
                 return true;
             }
-            else if (input.CastTo<WdFragment>(out WdFragment fragment1))
+            else if (input.CastTo<Fragment>(out Fragment fragment1))
             {
-                content = WdContent.CreateTextContent(fragment1);
+                content = Content.CreateTextContent(fragment1);
                 return true;
             }
             else if (input.CastTo<string>(out string text))
             {
-                content = WdContent.CreateTextContent(text);
+                content = Content.CreateTextContent(text);
                 return true;
             }
             else if (input.CastTo<double>(out double number))
             {
-                content = WdContent.CreateTextContent(number.ToString());
+                content = Content.CreateTextContent(number.ToString());
                 return true;
             }
             else if (input.CastTo<int>(out int integer))
             {
-                content = WdContent.CreateTextContent(integer.ToString());
+                content = Content.CreateTextContent(integer.ToString());
                 return true;
             }
             content = null;

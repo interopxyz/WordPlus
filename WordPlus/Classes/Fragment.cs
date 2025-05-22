@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WordPlus
 {
-    public class WdFragment
+    public class Fragment
     {
 
         #region members
@@ -20,9 +20,9 @@ namespace WordPlus
 
         #region constructors
 
-        public WdFragment() { }
+        public Fragment() { }
 
-        public WdFragment(WdFragment fragment)
+        public Fragment(Fragment fragment)
         {
             this.Text = fragment.Text;
             this.Hyperlink = fragment.Hyperlink;
@@ -30,18 +30,18 @@ namespace WordPlus
             this.graphic = new Graphic(fragment.graphic);
         }
 
-        public WdFragment(string text)
+        public Fragment(string text)
         {
             this.Text = text;
         }
 
-        public WdFragment(string text, string hyperlink)
+        public Fragment(string text, string hyperlink)
         {
             this.Text = text;
             this.Hyperlink = hyperlink;
         }
 
-        public WdFragment(string text, Font font)
+        public Fragment(string text, Font font)
         {
             this.Text = text;
             this.font = new Font(font);

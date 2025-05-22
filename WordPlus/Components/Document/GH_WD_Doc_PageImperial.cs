@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_PageImperial : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_PageImperial class.
         /// </summary>
         public GH_WD_Doc_PageImperial()
-          : base("US Standard Pages", "US",
-              "Create a Document from a standard US Standard Paper Size",
+          : base("US Standard Word Pages", "WD US",
+              "Create a Word Document from a standard US Standard Paper Size",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -32,7 +32,7 @@ namespace WordPlus.Components.Document
             pManager[2].Optional = true;
 
             Param_Integer paramA = (Param_Integer)pManager[0];
-            foreach (WdPage.SizesUS value in Enum.GetValues(typeof(WdPage.SizesUS)))
+            foreach (Page.SizesUS value in Enum.GetValues(typeof(Page.SizesUS)))
             {
                 paramA.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -42,7 +42,7 @@ namespace WordPlus.Components.Document
             paramB.AddNamedValue("Landscape", 1);
 
             Param_Integer paramC = (Param_Integer)pManager[2];
-            foreach (WdPage.Margins value in Enum.GetValues(typeof(WdPage.Margins)))
+            foreach (Page.Margins value in Enum.GetValues(typeof(Page.Margins)))
             {
                 paramC.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -68,14 +68,14 @@ namespace WordPlus.Components.Document
             DA.GetData(0, ref type);
 
             WdDocument document = new WdDocument();
-            document.Page = WdPage.Imperial((WdPage.SizesUS)type);
+            document.Page = Page.Imperial((Page.SizesUS)type);
 
             int orientation = 0;
             DA.GetData(1, ref orientation);
-            if (orientation != 0) document.Page.Orientation = WdPage.Orientations.Landscape;
+            if (orientation != 0) document.Page.Orientation = Page.Orientations.Landscape;
 
             int margin = 0;
-            if(DA.GetData(2, ref margin))document.Page.SetMargin((WdPage.Margins)margin);
+            if(DA.GetData(2, ref margin))document.Page.SetMargin((Page.Margins)margin);
 
             DA.SetData(0, document);
         }

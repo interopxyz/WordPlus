@@ -13,8 +13,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Doc_AddContents class.
         /// </summary>
         public GH_WD_Doc_AddContents()
-          : base("Document Contents", "WD Content",
-              "Sequentially adds contents to a document and return document contnets",
+          : base("Word Document Contents", "WD Content",
+              "Sequentially adds contents to a Word document and return document contnets",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -61,7 +61,7 @@ namespace WordPlus.Components
 
             List<IGH_Goo> goos = new List<IGH_Goo>();
             if (!DA.GetDataList(1, goos)) return;
-            foreach(IGH_Goo goo in goos) if (goo.TryGetContent(out WdContent content)) document.AddContent(content);
+            foreach(IGH_Goo goo in goos) if (goo.TryGetContent(out Content content)) document.AddContent(content);
 
             DA.SetData(0, document);
             DA.SetDataList(1, document.GetContents());

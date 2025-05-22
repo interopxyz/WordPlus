@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Modify
+namespace WordPlus.Components
 {
     public class GH_WD_Con_Mod_Align : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Modify
         /// Initializes a new instance of the GH_WD_Con_Mod_Align class.
         /// </summary>
         public GH_WD_Con_Mod_Align()
-          : base("Content Align", "ConAlign",
-              "Modify Content Alignment if applicable",
+          : base("Word Content Align", "WD ConAlign",
+              "Modify Word Content Alignment if applicable",
               Constants.ShortName, Constants.Modify)
         {
         }
@@ -67,7 +67,7 @@ namespace WordPlus.Components.Modify
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            if (!gooA.TryGetContent(out WdContent content))
+            if (!gooA.TryGetContent(out Content content))
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Con input must be a Content Object, Text Fragment Object, or a string");
                 return;

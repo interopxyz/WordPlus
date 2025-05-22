@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_Stream : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_Stream class.
         /// </summary>
         public GH_WD_Doc_Stream()
-          : base("Write Document", "Write Doc",
-              "Write a Document to a memory stream",
+          : base("Write Word Document", "WD Write Doc",
+              "Write a Word Document to a memory stream",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -62,7 +62,7 @@ namespace WordPlus.Components.Document
                     }
                     document = new WdDocument(document);
 
-                    DA.SetData(0,document.StreamDocument());
+                    DA.SetData(0,document.Stream());
                 }
             }
         }

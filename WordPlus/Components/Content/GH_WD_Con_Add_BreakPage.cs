@@ -12,8 +12,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Con_PageBreak class.
         /// </summary>
         public GH_WD_Con_BreakPage()
-          : base("Page Break Contents", "PgBrk",
-              "Construct a Page Break Content Object",
+          : base("Word Page Break Contents", "WD Pg Brk",
+              "Construct a Word Page Break Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -41,7 +41,7 @@ namespace WordPlus.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            WdContent content = WdContent.CreatePageBreakContent();
+            Content content = Content.CreatePageBreakContent();
 
             DA.SetData(0, content);
         }

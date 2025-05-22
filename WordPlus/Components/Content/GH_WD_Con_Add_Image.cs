@@ -15,8 +15,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Con_Image class.
         /// </summary>
         public GH_WD_Con_Image()
-          : base("Image Content", "Img",
-              "Construct an Image Content Object",
+          : base("Word Image Content", "WD Img",
+              "Construct a Word Image Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -77,7 +77,7 @@ namespace WordPlus.Components
 
             if (isValid)
             {
-                WdContent content = WdContent.CreateImageContent(image);
+                Content content = Content.CreateImageContent(image);
                 DA.SetData(0, content);
             }
 

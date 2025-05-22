@@ -16,8 +16,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Con_List class.
         /// </summary>
         public GH_WD_Con_List()
-          : base("List Contents", "Lst",
-              "Construct a Text List Content Object",
+          : base("Word List Contents", "WD Lst",
+              "Construct a Word Text List Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -39,7 +39,7 @@ namespace WordPlus.Components
             pManager[3].Optional = true;
 
             Param_Integer paramA = (Param_Integer)pManager[2];
-            foreach (WdContent.BulletPoints value in Enum.GetValues(typeof(WdContent.BulletPoints)))
+            foreach (Content.BulletPoints value in Enum.GetValues(typeof(Content.BulletPoints)))
             {
                 paramA.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -72,12 +72,12 @@ namespace WordPlus.Components
             DA.GetData(3, ref preset);
             bool hasPreset = preset > 0; 
 
-            List<WdParagraph> paragraphs = new List<WdParagraph>();
+            List<Paragraph> paragraphs = new List<Paragraph>();
             foreach (IGH_Goo goo in goos)
             {
-                if (goo.TryGetParagraph(out WdParagraph paragraph))
+                if (goo.TryGetParagraph(out Paragraph paragraph))
                 {
-                    if(hasPreset) foreach (WdFragment fragment in paragraph.Fragments) fragment.Font = Fonts.GetPreset((Font.Presets)preset);
+                    if(hasPreset) foreach (Fragment fragment in paragraph.Fragments) fragment.Font = Fonts.GetPreset((Font.Presets)preset);
                     paragraphs.Add(paragraph);
                 }
             }
@@ -88,7 +88,7 @@ namespace WordPlus.Components
             int style = 0;
             DA.GetData(2, ref style);
 
-            WdContent content = WdContent.CreateListContent(paragraphs, levels,(WdContent.BulletPoints)style);
+            Content content = Content.CreateListContent(paragraphs, levels,(Content.BulletPoints)style);
 
             DA.SetData(0, content);
         }

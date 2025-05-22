@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_FontStyle : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_Mod_CharStyle class.
         /// </summary>
         public GH_WD_Txt_Mod_FontStyle()
-          : base("Content Char Style", "ConCharStyle",
-              "Modify Content Character Styles if applicable",
+          : base("Word Content Char Style", "WD ConCharStyle",
+              "Modify Word Content Character Styles if applicable",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -69,9 +69,9 @@ namespace WordPlus.Components.Content
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            WdParagraph paragraph = null;
+            Paragraph paragraph = null;
             bool isParagraph = false;
-            WdFragment fragment = null;
+            Fragment fragment = null;
 
             if (gooA.TryCastToParagraph(out paragraph))
             {
@@ -88,7 +88,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Bold = bold;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Bold = bold;
                 }
                 else
                 {
@@ -102,7 +102,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Italic = italic;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Italic = italic;
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Underlined = underlined;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Underlined = underlined;
                 }
                 else
                 {
@@ -128,7 +128,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Strikethrough = strikethrough;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Strikethrough = strikethrough;
                 }
                 else
                 {
@@ -141,8 +141,8 @@ namespace WordPlus.Components.Content
 
                 if (isParagraph)
                 {
-                    if (style == 1) foreach (WdFragment f in paragraph.Fragments) f.Font.Superscript = true;
-                    if (style == 2) foreach (WdFragment f in paragraph.Fragments) f.Font.Subscript = true;
+                    if (style == 1) foreach (Fragment f in paragraph.Fragments) f.Font.Superscript = true;
+                    if (style == 2) foreach (Fragment f in paragraph.Fragments) f.Font.Subscript = true;
                 }
                 else
                 {

@@ -14,8 +14,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Con_Table class.
         /// </summary>
         public GH_WD_Con_Table()
-          : base("Table Content", "Tbl",
-              "Construct a Table Content Object",
+          : base("Word Table Content", "WD Tbl",
+              "Construct a Word Table Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -47,15 +47,15 @@ namespace WordPlus.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<List<WdContent>> dataSet = new List<List<WdContent>>();
+            List<List<Content>> dataSet = new List<List<Content>>();
             if (!DA.GetDataTree(0, out GH_Structure<IGH_Goo> gooSet)) return;
 
             foreach (List<IGH_Goo> goos in gooSet.Branches)
             {
-                List<WdContent> contents = new List<WdContent>();
+                List<Content> contents = new List<Content>();
                 foreach (IGH_Goo goo in goos)
                 {
-                    if (goo.TryGetContent(out WdContent content))
+                    if (goo.TryGetContent(out Content content))
                     {
                         content.Graphic.HasBorders = true;
                         contents.Add(content);
@@ -64,10 +64,10 @@ namespace WordPlus.Components
                 dataSet.Add(contents);
             }
 
-            WdContent table = WdContent.CreateTableContent(dataSet);
+            Content table = Content.CreateTableContent(dataSet);
 
             IGH_Goo gooA = null;
-            if (DA.GetData(1, ref gooA)) if(gooA.TryGetParagraph(out WdParagraph title)) table.Text = title;
+            if (DA.GetData(1, ref gooA)) if(gooA.TryGetParagraph(out Paragraph title)) table.Text = title;
 
             DA.SetData(0, table);
         }

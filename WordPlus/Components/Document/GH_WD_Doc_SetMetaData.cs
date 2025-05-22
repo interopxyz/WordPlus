@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_SetMetaData : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_SetMetaData class.
         /// </summary>
         public GH_WD_Doc_SetMetaData()
-          : base("Document Meta Data", "WD Meta",
-              "Sets the document meta data",
+          : base("Word Document Meta Data", "WD Meta",
+              "Sets the Word document meta data",
               Constants.ShortName, Constants.SubDocument)
         {
         }

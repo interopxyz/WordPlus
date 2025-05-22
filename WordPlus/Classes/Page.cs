@@ -8,7 +8,7 @@ using WD = OfficeIMO.Word;
 
 namespace WordPlus
 {
-    public class WdPage
+    public class Page
     {
 
         #region members
@@ -38,12 +38,12 @@ namespace WordPlus
 
         #region constructors
 
-        public WdPage()
+        public Page()
         {
 
         }
 
-        public WdPage(WdPage page)
+        public Page(Page page)
         {
             this.name = page.name;
 
@@ -60,14 +60,14 @@ namespace WordPlus
             this.Orientation = page.Orientation;
         }
 
-        public WdPage(string name, double width, double height)
+        public Page(string name, double width, double height)
         {
             this.name = name;
             this.width = width;
             this.height = height;
         }
 
-        public WdPage(string name, double width, double height, Margins margin)
+        public Page(string name, double width, double height, Margins margin)
         {
             this.name = name;
             this.width = width;
@@ -76,38 +76,38 @@ namespace WordPlus
         }
 
         //North American
-        public static WdPage Letter() { return new WdPage("Letter", 12240, 15840, Margins.Generous); }
-        public static WdPage Legal() { return new WdPage("Legal", 12240, 20160, Margins.Generous); }
-        public static WdPage Statement() { return new WdPage("Statement", 7920, 12240, Margins.Dense); }
-        public static WdPage Tabloid() { return new WdPage("Tabloid", 15840, 24480, Margins.Dense); }
-        public static WdPage Executive() { return new WdPage("Executive", 6120, 15120, Margins.Comfortable); }
-        public static WdPage ANSIC() { return new WdPage("ANSIC", 24480, 31680, Margins.Dense); }
+        public static Page Letter() { return new Page("Letter", 12240, 15840, Margins.Generous); }
+        public static Page Legal() { return new Page("Legal", 12240, 20160, Margins.Generous); }
+        public static Page Statement() { return new Page("Statement", 7920, 12240, Margins.Dense); }
+        public static Page Tabloid() { return new Page("Tabloid", 15840, 24480, Margins.Dense); }
+        public static Page Executive() { return new Page("Executive", 6120, 15120, Margins.Comfortable); }
+        public static Page ANSIC() { return new Page("ANSIC", 24480, 31680, Margins.Dense); }
 
         //ISO A Series
         //public static WdPage A0() { return new WdPage("A0", 47664, 67368); }//Word limited to 22x22"
         //public static WdPage A1() { return new WdPage("A1", 33696, 47664); }//Word limited to 22x22"
         //public static WdPage A2() { return new WdPage("A2", 23760, 33696); }//Word limited to 22x22"
-        public static WdPage A3() { return new WdPage("A3", 16838, 23760, Margins.Wide); }
-        public static WdPage A4() { return new WdPage("A4", 11909, 16838, Margins.Generous); }
-        public static WdPage A5() { return new WdPage("A5", 8395, 11909, Margins.Moderate); }
-        public static WdPage A6() { return new WdPage("A6", 5950, 8395, Margins.Narrow); }
-        public static WdPage A7() { return new WdPage("A7", 4195, 5950, Margins.Narrow); }
-        public static WdPage A8() { return new WdPage("A8", 2948, 4195, Margins.Narrow); }
-        public static WdPage A9() { return new WdPage("A9", 2098, 2948, Margins.Narrow); }
-        public static WdPage A10() { return new WdPage("A10", 1474, 2098, Margins.Narrow); }
+        public static Page A3() { return new Page("A3", 16838, 23760, Margins.Wide); }
+        public static Page A4() { return new Page("A4", 11909, 16838, Margins.Generous); }
+        public static Page A5() { return new Page("A5", 8395, 11909, Margins.Moderate); }
+        public static Page A6() { return new Page("A6", 5950, 8395, Margins.Narrow); }
+        public static Page A7() { return new Page("A7", 4195, 5950, Margins.Narrow); }
+        public static Page A8() { return new Page("A8", 2948, 4195, Margins.Narrow); }
+        public static Page A9() { return new Page("A9", 2098, 2948, Margins.Narrow); }
+        public static Page A10() { return new Page("A10", 1474, 2098, Margins.Narrow); }
 
         //ISO B Series
         //public static WdPage B0() { return new WdPage("B0", 56693, 80210); }//Word limited to 22x22"
         //public static WdPage B1() { return new WdPage("B1", 40034, 56693); }//Word limited to 22x22"
         //public static WdPage B2() { return new WdPage("B2", 28346, 40034); }//Word limited to 22x22"
-        public static WdPage B3() { return new WdPage("B3", 20008, 28346, Margins.Narrow); }
-        public static WdPage B4() { return new WdPage("B4", 14173, 20008, Margins.Moderate); }
-        public static WdPage B5() { return new WdPage("B5", 9978, 14173, Margins.Moderate); }
-        public static WdPage B6() { return new WdPage("B6", 7087, 9978, Margins.Moderate); }
-        public static WdPage B7() { return new WdPage("B7", 4989, 7087, Margins.Tight); }
-        public static WdPage B8() { return new WdPage("B8", 3515, 4989, Margins.Tight); }
-        public static WdPage B9() { return new WdPage("B9", 2494, 3515, Margins.Tight); }
-        public static WdPage B10() { return new WdPage("B10", 1757, 2494, Margins.Tight); }
+        public static Page B3() { return new Page("B3", 20008, 28346, Margins.Narrow); }
+        public static Page B4() { return new Page("B4", 14173, 20008, Margins.Moderate); }
+        public static Page B5() { return new Page("B5", 9978, 14173, Margins.Moderate); }
+        public static Page B6() { return new Page("B6", 7087, 9978, Margins.Moderate); }
+        public static Page B7() { return new Page("B7", 4989, 7087, Margins.Tight); }
+        public static Page B8() { return new Page("B8", 3515, 4989, Margins.Tight); }
+        public static Page B9() { return new Page("B9", 2494, 3515, Margins.Tight); }
+        public static Page B10() { return new Page("B10", 1757, 2494, Margins.Tight); }
 
         #endregion
 
@@ -172,12 +172,12 @@ namespace WordPlus
 
         #region methods
 
-        public static WdPage IsoA(WdPage.SizesIsoA type)
+        public static Page IsoA(Page.SizesIsoA type)
         {
             switch(type)
             {
                 default:
-                return WdPage.A4();
+                return Page.A4();
                 //case SizesIsoA.A0:
                 //    return WdPage.A0();
                 //case SizesIsoA.A1:
@@ -185,28 +185,28 @@ namespace WordPlus
                 //case SizesIsoA.A2:
                 //    return WdPage.A2();
                 case SizesIsoA.A3:
-                    return WdPage.A3();
+                    return Page.A3();
                 case SizesIsoA.A5:
-                    return WdPage.A5();
+                    return Page.A5();
                 case SizesIsoA.A6:
-                    return WdPage.A6();
+                    return Page.A6();
                 case SizesIsoA.A7:
-                    return WdPage.A7();
+                    return Page.A7();
                 case SizesIsoA.A8:
-                    return WdPage.A8();
+                    return Page.A8();
                 case SizesIsoA.A9:
-                    return WdPage.A9();
+                    return Page.A9();
                 case SizesIsoA.A10:
-                    return WdPage.A10();
+                    return Page.A10();
             }
         }
 
-        public static WdPage IsoB(WdPage.SizesIsoB type)
+        public static Page IsoB(Page.SizesIsoB type)
         {
             switch (type)
             {
                 default:
-                    return WdPage.B4();
+                    return Page.B4();
                 //case SizesIsoB.B0:
                 //    return WdPage.B0();
                 //case SizesIsoB.B1:
@@ -214,38 +214,38 @@ namespace WordPlus
                 //case SizesIsoB.B2:
                 //    return WdPage.B2();
                 case SizesIsoB.B3:
-                    return WdPage.B3();
+                    return Page.B3();
                 case SizesIsoB.B5:
-                    return WdPage.B5();
+                    return Page.B5();
                 case SizesIsoB.B6:
-                    return WdPage.B6();
+                    return Page.B6();
                 case SizesIsoB.B7:
-                    return WdPage.B7();
+                    return Page.B7();
                 case SizesIsoB.B8:
-                    return WdPage.B8();
+                    return Page.B8();
                 case SizesIsoB.B9:
-                    return WdPage.B9();
+                    return Page.B9();
                 case SizesIsoB.B10:
-                    return WdPage.B10();
+                    return Page.B10();
             }
         }
 
-        public static WdPage Imperial(WdPage.SizesUS type)
+        public static Page Imperial(Page.SizesUS type)
         {
             switch (type)
             {
                 default:
-                    return WdPage.Letter();
+                    return Page.Letter();
                 case SizesUS.Executive:
-                    return WdPage.Executive();
+                    return Page.Executive();
                 case SizesUS.Legal:
-                    return WdPage.Legal();
+                    return Page.Legal();
                 case SizesUS.Statement:
-                    return WdPage.Statement();
+                    return Page.Statement();
                 case SizesUS.Tabloid:
-                    return WdPage.Tabloid();
+                    return Page.Tabloid();
                 case SizesUS.ANSIC:
-                    return WdPage.ANSIC();
+                    return Page.ANSIC();
             }
         }
 

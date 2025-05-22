@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Text
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_TextCombine : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Text
         /// Initializes a new instance of the GH_WD_Txt_Mod_CombineText class.
         /// </summary>
         public GH_WD_Txt_Mod_TextCombine()
-          : base("Combine Text", "CombineTxt",
-              "Combine Text Paragraphs, Text Fragments, or Strings into a Text Paragraph Object",
+          : base("Combine Word Text", "WD CombineTxt",
+              "Combine Word Text Paragraphs, Text Fragments, or Strings into a Text Paragraph Object",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -45,9 +45,9 @@ namespace WordPlus.Components.Text
         {
             List<IGH_Goo> goos = new List<IGH_Goo>();
             if (!DA.GetDataList(0, goos)) return;
-            List<WdParagraph> paragraphs = new List<WdParagraph>();
-            foreach (IGH_Goo goo in goos) if (goo.TryGetParagraph(out WdParagraph para)) paragraphs.Add(para);
-            WdParagraph paragraph = new WdParagraph(paragraphs);
+            List<Paragraph> paragraphs = new List<Paragraph>();
+            foreach (IGH_Goo goo in goos) if (goo.TryGetParagraph(out Paragraph para)) paragraphs.Add(para);
+            Paragraph paragraph = new Paragraph(paragraphs);
 
             DA.SetData(0,paragraph);
         }

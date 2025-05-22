@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_SetMargins : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_SetMargins class.
         /// </summary>
         public GH_WD_Doc_SetMargins()
-          : base("Document Margins", "WD Margins",
-              "Sets the number of text columns in a document",
+          : base("Word Document Margins", "WD Margins",
+              "Sets the number of text columns in a Word document",
               Constants.ShortName, Constants.SubDocument)
         {
         }

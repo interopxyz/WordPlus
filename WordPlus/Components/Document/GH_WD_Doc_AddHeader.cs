@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_AddHeader : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_AddHeader class.
         /// </summary>
         public GH_WD_Doc_AddHeader()
-          : base("Header Contents", "WD Header",
-              "Sequentially adds contents to a document header and return header contnets",
+          : base("Word Header Contents", "WD Header",
+              "Sequentially adds contents to a Word document header and return header contnets",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -72,7 +72,7 @@ namespace WordPlus.Components.Document
 
             List<IGH_Goo> goos = new List<IGH_Goo>();
             if (!DA.GetDataList(1, goos)) return;
-            foreach (IGH_Goo goo in goos) if (goo.TryGetContent(out WdContent content)) document.Header.Add(content);
+            foreach (IGH_Goo goo in goos) if (goo.TryGetContent(out Content content)) document.Header.Add(content);
 
             DA.SetData(0, document);
             DA.SetDataList(1, document.Header.GetContents());

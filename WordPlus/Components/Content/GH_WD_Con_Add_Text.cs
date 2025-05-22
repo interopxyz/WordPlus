@@ -14,8 +14,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Con_Text class.
         /// </summary>
         public GH_WD_Con_Text()
-          : base("Text Contents", "Txt",
-              "Construct a Text Content Object",
+          : base("Word Text Contents", "WD Txt",
+              "Construct a Word Text Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -56,16 +56,16 @@ namespace WordPlus.Components
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            if (!gooA.TryGetParagraph(out WdParagraph paragraph))
+            if (!gooA.TryGetParagraph(out Paragraph paragraph))
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Txt input must be a Text Fragment Object or a string");
                 return;
             }
 
             int preset = 0;
-            if (DA.GetData(1, ref preset)) if(preset>0) foreach(WdFragment fragment in paragraph.Fragments) fragment.Font = Fonts.GetPreset((Font.Presets)preset);
+            if (DA.GetData(1, ref preset)) if(preset>0) foreach(Fragment fragment in paragraph.Fragments) fragment.Font = Fonts.GetPreset((Font.Presets)preset);
 
-            WdContent content = WdContent.CreateTextContent(paragraph);
+            Content content = Content.CreateTextContent(paragraph);
 
             DA.SetData(0, content);
         }

@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_FontParagraph : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_Mod_Paragraph class.
         /// </summary>
         public GH_WD_Txt_Mod_FontParagraph()
-          : base("Content Paragraph", "ConPara",
-              "Modify Content Paragraph if applicable",
+          : base("Word Content Paragraph", "WD ConPara",
+              "Modify Word Content Paragraph if applicable",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -70,9 +70,9 @@ namespace WordPlus.Components.Content
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            WdParagraph paragraph = null;
+            Paragraph paragraph = null;
             bool isParagraph = false;
-            WdFragment fragment = null;
+            Fragment fragment = null;
 
             if (gooA.TryCastToParagraph(out paragraph))
             {
@@ -92,7 +92,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.HorizontalAlignment = (Font.HorizontalAlignments)horizontal;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.HorizontalAlignment = (Font.HorizontalAlignments)horizontal;
                 }
                 else
                 {

@@ -6,47 +6,47 @@ using System.Threading.Tasks;
 
 namespace WordPlus
 {
-    public class WdParagraph
+    public class Paragraph
     {
 
         #region methods
 
-        protected List<WdFragment> fragments = new List<WdFragment>();
+        protected List<Fragment> fragments = new List<Fragment>();
         protected double lineSpacing = 1.0;
 
         #endregion
 
         #region constructors
 
-        public WdParagraph()
+        public Paragraph()
         {
 
         }
 
-        public WdParagraph(WdParagraph paragraph)
+        public Paragraph(Paragraph paragraph)
         {
             this.fragments = paragraph.fragments.Duplicate();
             this.lineSpacing = paragraph.lineSpacing;
         }
 
-        public WdParagraph(string text)
+        public Paragraph(string text)
         {
-            this.fragments.Add(new WdFragment(text));
+            this.fragments.Add(new Fragment(text));
         }
 
-        public WdParagraph(WdFragment fragment)
+        public Paragraph(Fragment fragment)
         {
-            this.fragments.Add( new WdFragment(fragment));
+            this.fragments.Add( new Fragment(fragment));
         }
 
-        public WdParagraph(List<WdFragment> fragments)
+        public Paragraph(List<Fragment> fragments)
         {
             this.fragments = fragments.Duplicate();
         }
 
-        public WdParagraph(List<WdParagraph> paragraphs)
+        public Paragraph(List<Paragraph> paragraphs)
         {
-            foreach(WdParagraph paragraph in paragraphs) this.fragments.AddRange(paragraph.Fragments.Duplicate());
+            foreach(Paragraph paragraph in paragraphs) this.fragments.AddRange(paragraph.Fragments.Duplicate());
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace WordPlus
             set { this.lineSpacing = value; }
         }
 
-        public List<WdFragment> Fragments
+        public List<Fragment> Fragments
         {
             get { return fragments; }
             set { fragments = value; }
@@ -70,7 +70,7 @@ namespace WordPlus
             get
             {
                 StringBuilder output = new StringBuilder();
-                foreach (WdFragment fragment in this.fragments) output.Append(fragment.Text);
+                foreach (Fragment fragment in this.fragments) output.Append(fragment.Text);
                 return output.ToString();
             }
         }

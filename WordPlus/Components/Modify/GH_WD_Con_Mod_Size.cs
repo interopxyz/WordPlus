@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Con_Mod_Size : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_Mod_Size class.
         /// </summary>
         public GH_WD_Con_Mod_Size()
-          : base("Content Size", "ConSize",
-              "Modify Content Size if applicable",
+          : base("Word Content Size", "WD ConSize",
+              "Modify Word Content Size if applicable",
               Constants.ShortName, Constants.Modify)
         {
         }
@@ -62,7 +62,7 @@ namespace WordPlus.Components.Content
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            if (!gooA.TryGetContent(out WdContent content))
+            if (!gooA.TryGetContent(out Content content))
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Con input must be a Content Object, Text Fragment Object or a string");
                 return;
@@ -73,15 +73,15 @@ namespace WordPlus.Components.Content
                 default:
                     this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, content.ContentType.ToString().SplitAtCapitols() + " content does not support resizing");
                     break;
-                case WdContent.ContentTypes.Table:
+                case Content.ContentTypes.Table:
                     this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Table content does not support changing height");
                     break;
-                case WdContent.ContentTypes.ChartArea:
-                case WdContent.ContentTypes.ChartBar:
-                case WdContent.ContentTypes.ChartColumn:
-                case WdContent.ContentTypes.ChartLine:
-                case WdContent.ContentTypes.ChartPie:
-                case WdContent.ContentTypes.Image:
+                case Content.ContentTypes.ChartArea:
+                case Content.ContentTypes.ChartBar:
+                case Content.ContentTypes.ChartColumn:
+                case Content.ContentTypes.ChartLine:
+                case Content.ContentTypes.ChartPie:
+                case Content.ContentTypes.Image:
                     break;
             }
             int units = 0;

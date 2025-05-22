@@ -9,7 +9,7 @@ using Rhino.Geometry;
 
 using Sd = System.Drawing;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Con_ChartBar : GH_Component
     {
@@ -17,8 +17,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_Chart_Area class.
         /// </summary>
         public GH_WD_Con_ChartBar()
-          : base("Bar Chart", "ChartBar",
-              "Construct a Bar Chart Content Object from a list of numbers",
+          : base("Word Bar Chart", "WD Bar Cht",
+              "Construct a Word Bar Chart Content Object from a list of numbers",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -46,7 +46,7 @@ namespace WordPlus.Components.Content
             pManager[6].Optional = true;
 
             Param_Integer paramA = (Param_Integer)pManager[5];
-            foreach (WdContent.LegendLocations value in Enum.GetValues(typeof(WdContent.LegendLocations)))
+            foreach (Content.LegendLocations value in Enum.GetValues(typeof(Content.LegendLocations)))
             {
                 paramA.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -67,7 +67,7 @@ namespace WordPlus.Components.Content
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             IGH_Goo gooA = null;
-            WdParagraph title = new WdParagraph("Bar Chart"); ;
+            Paragraph title = new Paragraph("Bar Chart"); ;
             if (DA.GetData(1, ref gooA)) if(!gooA.TryGetParagraph(out title));
 
             List<List<double>> dataSet = new List<List<double>>();
@@ -85,13 +85,13 @@ namespace WordPlus.Components.Content
 
             List<IGH_Goo> goosA = new List<IGH_Goo>();
             DA.GetDataList(2, goosA);
-            List<WdParagraph> axis = new List<WdParagraph>();
-            foreach (IGH_Goo goo in goosA) if (goo.TryGetParagraph(out WdParagraph paragraph)) axis.Add(paragraph);
+            List<Paragraph> axis = new List<Paragraph>();
+            foreach (IGH_Goo goo in goosA) if (goo.TryGetParagraph(out Paragraph paragraph)) axis.Add(paragraph);
 
             List<IGH_Goo> goosB = new List<IGH_Goo>();
             DA.GetDataList(3, goosB);
-            List<WdParagraph> series = new List<WdParagraph>();
-            foreach (IGH_Goo goo in goosB) if (goo.TryGetParagraph(out WdParagraph paragraph)) series.Add(paragraph);
+            List<Paragraph> series = new List<Paragraph>();
+            foreach (IGH_Goo goo in goosB) if (goo.TryGetParagraph(out Paragraph paragraph)) series.Add(paragraph);
 
             List<Sd.Color> colors = new List<Sd.Color>();
             DA.GetDataList(4, colors);
@@ -102,14 +102,14 @@ namespace WordPlus.Components.Content
             bool isColumn = false;
             DA.GetData(6, ref isColumn);
 
-            WdContent content = null;
+            Content content = null;
             if (isColumn)
             {
-                content = WdContent.CreateChartColumnContent(title, dataSet, axis, series, colors, (WdContent.LegendLocations)legend);
+                content = Content.CreateChartColumnContent(title, dataSet, axis, series, colors, (Content.LegendLocations)legend);
             }
             else
             {
-                content = WdContent.CreateChartBarContent(title, dataSet, axis, series, colors, (WdContent.LegendLocations)legend);
+                content = Content.CreateChartBarContent(title, dataSet, axis, series, colors, (Content.LegendLocations)legend);
             }
 
             DA.SetData(0, content);

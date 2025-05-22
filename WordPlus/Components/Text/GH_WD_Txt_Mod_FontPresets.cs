@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_FontPresets : GH_Component
     {
@@ -14,8 +14,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_Mod_FontPresets class.
         /// </summary>
         public GH_WD_Txt_Mod_FontPresets()
-          : base("Content Font Presets", "ConPreset",
-              "Apply a preset Font Style",
+          : base("Word Content Font Presets", "WD ConPreset",
+              "Apply a preset Word Font Style",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -56,9 +56,9 @@ namespace WordPlus.Components.Content
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            WdParagraph paragraph = null;
+            Paragraph paragraph = null;
             bool isParagraph = false;
-            WdFragment fragment = null;
+            Fragment fragment = null;
 
             if (gooA.TryCastToParagraph(out paragraph))
             {
@@ -75,7 +75,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font = Fonts.GetPreset((Font.Presets)type);
+                    foreach (Fragment f in paragraph.Fragments) f.Font = Fonts.GetPreset((Font.Presets)type);
                 }
                 else
                 {

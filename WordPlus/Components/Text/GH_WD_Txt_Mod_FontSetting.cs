@@ -8,7 +8,7 @@ using Rhino.Geometry;
 
 using Sd = System.Drawing;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_FontSetting : GH_Component
     {
@@ -16,8 +16,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_Mod_Font class.
         /// </summary>
         public GH_WD_Txt_Mod_FontSetting()
-          : base("Content Font", "ConFont",
-              "Modify Content Font if applicable",
+          : base("Word Content Font", "WD ConFont",
+              "Modify Word Content Font if applicable",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -68,9 +68,9 @@ namespace WordPlus.Components.Content
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
             
-            WdParagraph paragraph = null;
+            Paragraph paragraph = null;
             bool isParagraph = false;
-            WdFragment fragment = null;
+            Fragment fragment = null;
 
             if (gooA.TryCastToParagraph(out paragraph))
             {
@@ -87,7 +87,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Family = family;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Family = family;
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Size = size;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Size = size;
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Color = color;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Color = color;
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace WordPlus.Components.Content
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Font.Highlight = (Font.HighlightColors)highlight;
+                    foreach (Fragment f in paragraph.Fragments) f.Font.Highlight = (Font.HighlightColors)highlight;
                 }
                 else
                 {

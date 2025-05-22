@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_SetColumns : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_SetColumns class.
         /// </summary>
         public GH_WD_Doc_SetColumns()
-          : base("Document Columns", "WD Cols",
-              "Sets the number of text columns in a document",
+          : base("Word Document Columns", "WD Cols",
+              "Sets the number of text columns in a Word document",
               Constants.ShortName, Constants.SubDocument)
         {
         }

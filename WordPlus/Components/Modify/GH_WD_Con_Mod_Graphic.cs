@@ -8,7 +8,7 @@ using Rhino.Geometry;
 
 using Sd = System.Drawing;
 
-namespace WordPlus.Components.Graphics
+namespace WordPlus.Components
 {
     public class GH_WD_Con_Mod_Graphic : GH_Component
     {
@@ -16,8 +16,8 @@ namespace WordPlus.Components.Graphics
         /// Initializes a new instance of the GH_WD_Con_Mod_Graphic class.
         /// </summary>
         public GH_WD_Con_Mod_Graphic()
-          : base("Content Graphic", "ConGraphic",
-              "Modify Content Graphics if applicable",
+          : base("Word Content Graphic", "WD ConGraphic",
+              "Modify Word Content Graphics if applicable",
               Constants.ShortName, Constants.Modify)
         {
         }
@@ -73,7 +73,7 @@ namespace WordPlus.Components.Graphics
                 double weight = 1.0;
                 int type = 0;
 
-            if(gooA.TryGetFragment(out WdFragment fragment))
+            if(gooA.TryGetFragment(out Fragment fragment))
             {
                 if (DA.GetData(1, ref fill)) fragment.Graphic.Fill = fill;
                 if (DA.GetData(2, ref stroke)) fragment.Graphic.Stroke = stroke;
@@ -86,12 +86,12 @@ namespace WordPlus.Components.Graphics
                 DA.SetData(3, fragment.Graphic.Weight);
                 DA.SetData(4, fragment.Graphic.LineType);
             }
-            else if (gooA.TryGetParagraph(out WdParagraph paragraph))
+            else if (gooA.TryGetParagraph(out Paragraph paragraph))
             {
-                if (DA.GetData(1, ref fill)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.Fill = fill;
-                if (DA.GetData(2, ref stroke)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.Stroke = stroke;
-                if (DA.GetData(3, ref weight)) foreach(WdFragment fragment1 in paragraph.Fragments)fragment1.Graphic.Weight = weight;
-                if (DA.GetData(4, ref type)) foreach (WdFragment fragment1 in paragraph.Fragments) fragment1.Graphic.LineType = (Graphic.LineTypes)type;
+                if (DA.GetData(1, ref fill)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.Fill = fill;
+                if (DA.GetData(2, ref stroke)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.Stroke = stroke;
+                if (DA.GetData(3, ref weight)) foreach(Fragment fragment1 in paragraph.Fragments)fragment1.Graphic.Weight = weight;
+                if (DA.GetData(4, ref type)) foreach (Fragment fragment1 in paragraph.Fragments) fragment1.Graphic.LineType = (Graphic.LineTypes)type;
 
                 DA.SetData(0, paragraph);
                 DA.SetData(1, paragraph.Fragments[0].Graphic.Fill);
@@ -99,7 +99,7 @@ namespace WordPlus.Components.Graphics
                 DA.SetData(3, paragraph.Fragments[0].Graphic.Weight);
                 DA.SetData(4, paragraph.Fragments[0].Graphic.LineType);
             }
-            else if (gooA.TryGetContent(out WdContent content))
+            else if (gooA.TryGetContent(out Content content))
             {
                 if (DA.GetData(1, ref fill)) content.Graphic.Fill = fill;
                 if (DA.GetData(2, ref stroke)) content.Graphic.Stroke = stroke;

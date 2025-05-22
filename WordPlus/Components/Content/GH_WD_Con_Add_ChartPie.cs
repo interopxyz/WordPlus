@@ -9,7 +9,7 @@ using Rhino.Geometry;
 
 using Sd = System.Drawing;
 
-namespace WordPlus.Components.Content
+namespace WordPlus.Components
 {
     public class GH_WD_Con_ChartPie : GH_Component
     {
@@ -17,8 +17,8 @@ namespace WordPlus.Components.Content
         /// Initializes a new instance of the GH_WD_Con_ChartPie class.
         /// </summary>
         public GH_WD_Con_ChartPie()
-          : base("Pie Chart", "ChartPie",
-              "Construct a Pie Chart Content Object from a list of numbers",
+          : base("Word Pie Chart", "WD Pie Cht",
+              "Construct a Word Pie Chart Content Object from a list of numbers",
               Constants.ShortName, Constants.SubContent)
         {
         }
@@ -40,7 +40,7 @@ namespace WordPlus.Components.Content
             pManager[3].Optional = true;
 
             Param_Integer paramA = (Param_Integer)pManager[3];
-            foreach (WdContent.LegendLocations value in Enum.GetValues(typeof(WdContent.LegendLocations)))
+            foreach (Content.LegendLocations value in Enum.GetValues(typeof(Content.LegendLocations)))
             {
                 paramA.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -61,7 +61,7 @@ namespace WordPlus.Components.Content
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             IGH_Goo gooA = null;
-            WdParagraph title = new WdParagraph("Pie Chart"); ;
+            Paragraph title = new Paragraph("Pie Chart"); ;
             if (DA.GetData(1, ref gooA)) if (!gooA.TryGetParagraph(out title)) ;
 
             List<double> dataSet = new List<double>();
@@ -69,8 +69,8 @@ namespace WordPlus.Components.Content
 
             List<IGH_Goo> goos = new List<IGH_Goo>();
             DA.GetDataList(2, goos);
-            List<WdParagraph> series = new List<WdParagraph>();
-            foreach (IGH_Goo goo in goos) if (goo.TryGetParagraph(out WdParagraph paragraph)) series.Add(paragraph);
+            List<Paragraph> series = new List<Paragraph>();
+            foreach (IGH_Goo goo in goos) if (goo.TryGetParagraph(out Paragraph paragraph)) series.Add(paragraph);
 
             List<Sd.Color> colors = new List<Sd.Color>();
             //DA.GetDataList(3, colors);
@@ -78,7 +78,7 @@ namespace WordPlus.Components.Content
             int legend = 0;
             DA.GetData(3, ref legend);
 
-            WdContent content = WdContent.CreateChartPieContent(title, dataSet, series, colors, (WdContent.LegendLocations)legend);
+            Content content = Content.CreateChartPieContent(title, dataSet, series, colors, (Content.LegendLocations)legend);
 
             DA.SetData(0, content);
         }

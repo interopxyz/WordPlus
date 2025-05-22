@@ -13,7 +13,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace WordPlus
 {
-    public class WdContent
+    public class Content
     {
 
         #region members
@@ -31,11 +31,11 @@ namespace WordPlus
         protected double width = 0;
         protected double height = 0;
 
-        protected WdParagraph text = new WdParagraph();
-        protected List<List<WdParagraph>> values = new List<List<WdParagraph>>();
+        protected Paragraph text = new Paragraph();
+        protected List<List<Paragraph>> values = new List<List<Paragraph>>();
         protected List<List<double>> numbers = new List<List<double>>();
         protected List<List<Sd.Color>> colors = new List<List<Sd.Color>>();
-        protected List<List<WdContent>> contents = new List<List<WdContent>>();
+        protected List<List<Content>> contents = new List<List<Content>>();
         protected Sd.Bitmap image = new Sd.Bitmap(10, 10);
 
         BulletPoints bulletStyle = BulletPoints.Bulleted;
@@ -44,12 +44,12 @@ namespace WordPlus
 
         #region constructors
 
-        public WdContent()
+        public Content()
         {
 
         }
 
-        public WdContent(WdContent content)
+        public Content(Content content)
         {
             this.type = content.type;
             this.legendLocation = content.legendLocation;
@@ -60,7 +60,7 @@ namespace WordPlus
             this.width = content.width;
             this.height = content.height;
 
-            this.text = new WdParagraph(content.text);
+            this.text = new Paragraph(content.text);
             this.image = new Sd.Bitmap(content.image);
             this.values = content.values.Duplicate();
             this.numbers = content.numbers.Duplicate();
@@ -71,59 +71,59 @@ namespace WordPlus
         }
 
         //LINE BREAK
-        public static WdContent CreateHorizontalLineContent()
+        public static Content CreateHorizontalLineContent()
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.LineBreak;
 
             return content;
         }
 
         //PAGE BREAK
-        public static WdContent CreatePageBreakContent()
+        public static Content CreatePageBreakContent()
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.PageBreak;
 
             return content;
         }
 
         //TEXT
-        public static WdContent CreateTextContent(string text)
+        public static Content CreateTextContent(string text)
         {
-            return WdContent.CreateTextContent(new WdParagraph(text));
+            return Content.CreateTextContent(new Paragraph(text));
         }
 
-        public static WdContent CreateTextContent(WdFragment fragment)
+        public static Content CreateTextContent(Fragment fragment)
         {
-            return WdContent.CreateTextContent(new WdParagraph(fragment));
+            return Content.CreateTextContent(new Paragraph(fragment));
         }
 
-        public static WdContent CreateTextContent(WdParagraph paragraph)
+        public static Content CreateTextContent(Paragraph paragraph)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.Text;
 
-            content.text = new WdParagraph(paragraph);
+            content.text = new Paragraph(paragraph);
             content.graphic = new Graphic(paragraph.Fragments[0].Graphic);
 
             return content;
         }
 
         //LIST
-        public static WdContent CreateListContent(List<string> values, List<int> indices, BulletPoints style)
+        public static Content CreateListContent(List<string> values, List<int> indices, BulletPoints style)
         {
-            return WdContent.CreateListContent(values.DuplicateAsFragments(), indices, style); ;
+            return Content.CreateListContent(values.DuplicateAsFragments(), indices, style); ;
         }
 
-        public static WdContent CreateListContent(List<WdParagraph> values, List<int> indices, BulletPoints style)
+        public static Content CreateListContent(List<Paragraph> values, List<int> indices, BulletPoints style)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.List;
 
             content.bulletStyle = style;
-            content.values.Add(new List<WdParagraph>());
-            foreach (WdParagraph text in values) content.values[0].Add(new WdParagraph(text));
+            content.values.Add(new List<Paragraph>());
+            foreach (Paragraph text in values) content.values[0].Add(new Paragraph(text));
 
             if (indices.Count == 0) indices.Add(0);
             int count = indices.Count;
@@ -134,14 +134,14 @@ namespace WordPlus
             return content;
         }
 
-        public static WdContent CreateListContent(List<WdFragment> values, List<int> indices, BulletPoints style)
+        public static Content CreateListContent(List<Fragment> values, List<int> indices, BulletPoints style)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.List;
 
             content.bulletStyle = style;
-            content.values.Add(new List<WdParagraph>());
-            foreach (WdFragment text in values) content.values[0].Add(new WdParagraph(text));
+            content.values.Add(new List<Paragraph>());
+            foreach (Fragment text in values) content.values[0].Add(new Paragraph(text));
 
             if (indices.Count == 0) indices.Add(0);
             int count = indices.Count;
@@ -153,19 +153,19 @@ namespace WordPlus
         }
 
         //TABLE
-        public static WdContent CreateTableContent(List<List<string>> values)
+        public static Content CreateTableContent(List<List<string>> values)
         {
-            return WdContent.CreateTableContent(values.DuplicateAsContents());
+            return Content.CreateTableContent(values.DuplicateAsContents());
         }
 
-        public static WdContent CreateTableContent(List<List<string>> values, WdParagraph title)
+        public static Content CreateTableContent(List<List<string>> values, Paragraph title)
         {
-            return WdContent.CreateTableContent(values.DuplicateAsParagraphs(), title);
+            return Content.CreateTableContent(values.DuplicateAsParagraphs(), title);
         }
 
-        public static WdContent CreateTableContent(List<List<WdContent>> values)
+        public static Content CreateTableContent(List<List<Content>> values)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.Table;
 
             content.contents = values.Duplicate();
@@ -173,21 +173,21 @@ namespace WordPlus
             return content;
         }
 
-        public static WdContent CreateTableContent(List<List<WdParagraph>> values, WdParagraph title)
+        public static Content CreateTableContent(List<List<Paragraph>> values, Paragraph title)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.Table;
 
-            content.text = new WdParagraph(title);
+            content.text = new Paragraph(title);
             content.values = values.Duplicate();
 
             return content;
         }
 
         //IMAGE
-        public static WdContent CreateImageContent(Sd.Bitmap image)
+        public static Content CreateImageContent(Sd.Bitmap image)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.Image;
 
             content.image = new Sd.Bitmap(image);
@@ -196,14 +196,14 @@ namespace WordPlus
         }
 
         //BAR CHART
-        public static WdContent CreateChartBarContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartBarContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            return WdContent.CreateChartBarContent(new WdParagraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
+            return Content.CreateChartBarContent(new Paragraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
         }
 
-        public static WdContent CreateChartBarContent(WdParagraph title, List<List<double>> values, List<WdParagraph> axis, List<WdParagraph> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartBarContent(Paragraph title, List<List<double>> values, List<Paragraph> axis, List<Paragraph> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.ChartBar;
 
             content.text = title;
@@ -214,14 +214,14 @@ namespace WordPlus
         }
 
         //COLUMN CHART
-        public static WdContent CreateChartColumnContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartColumnContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            return WdContent.CreateChartColumnContent(new WdParagraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
+            return Content.CreateChartColumnContent(new Paragraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
         }
 
-        public static WdContent CreateChartColumnContent(WdParagraph title, List<List<double>> values, List<WdParagraph> axis, List<WdParagraph> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartColumnContent(Paragraph title, List<List<double>> values, List<Paragraph> axis, List<Paragraph> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.ChartColumn;
 
             content.text = title;
@@ -232,14 +232,14 @@ namespace WordPlus
         }
 
         //LINE CHART
-        public static WdContent CreateChartLineContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartLineContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            return WdContent.CreateChartLineContent(new WdParagraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
+            return Content.CreateChartLineContent(new Paragraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
         }
 
-        public static WdContent CreateChartLineContent(WdParagraph title, List<List<double>> values, List<WdParagraph> axis, List<WdParagraph> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartLineContent(Paragraph title, List<List<double>> values, List<Paragraph> axis, List<Paragraph> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.ChartLine;
 
             content.text = title;
@@ -250,14 +250,14 @@ namespace WordPlus
         }
 
         //AREA CHART
-        public static WdContent CreateChartAreaContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartAreaContent(string title, List<List<double>> values, List<string> axis, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            return WdContent.CreateChartAreaContent(new WdParagraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
+            return Content.CreateChartAreaContent(new Paragraph(title), values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors, legend);
         }
 
-        public static WdContent CreateChartAreaContent(WdParagraph title, List<List<double>> values, List<WdParagraph> axis, List<WdParagraph> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartAreaContent(Paragraph title, List<List<double>> values, List<Paragraph> axis, List<Paragraph> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.ChartArea;
 
             content.text = title;
@@ -268,14 +268,14 @@ namespace WordPlus
         }
 
         //PIE CHART
-        public static WdContent CreateChartPieContent(string title, List<double> values, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartPieContent(string title, List<double> values, List<string> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            return WdContent.CreateChartPieContent(new WdParagraph(title), values, labels.DuplicateAsParagraphs(), colors, legend);
+            return Content.CreateChartPieContent(new Paragraph(title), values, labels.DuplicateAsParagraphs(), colors, legend);
         }
 
-        public static WdContent CreateChartPieContent(WdParagraph title, List<double> values, List<WdParagraph> labels, List<Sd.Color> colors, LegendLocations legend)
+        public static Content CreateChartPieContent(Paragraph title, List<double> values, List<Paragraph> labels, List<Sd.Color> colors, LegendLocations legend)
         {
-            WdContent content = new WdContent();
+            Content content = new Content();
             content.type = ContentTypes.ChartPie;
 
             content.text = title;
@@ -313,10 +313,10 @@ namespace WordPlus
             set { this.height = value; }
         }
 
-        public virtual WdParagraph Text
+        public virtual Paragraph Text
         {
             get { return this.text; }
-            set { this.text = new WdParagraph(value); }
+            set { this.text = new Paragraph(value); }
         }
 
         public virtual ContentTypes ContentType
@@ -333,17 +333,17 @@ namespace WordPlus
             this.PopulateChart(values, axis.DuplicateAsParagraphs(), labels.DuplicateAsParagraphs(), colors);
         }
 
-        private void PopulateChart(List<List<double>> values, List<WdParagraph> axis, List<WdParagraph> labels, List<Sd.Color> colors)
+        private void PopulateChart(List<List<double>> values, List<Paragraph> axis, List<Paragraph> labels, List<Sd.Color> colors)
         {
             int max = values[0].Count;
             int count = axis.Count;
-            List<WdParagraph> axisA = axis.Duplicate();
-            for (int i = count; i < max; i++) axisA.Add(new WdParagraph("Item " + (i + 1)));
+            List<Paragraph> axisA = axis.Duplicate();
+            for (int i = count; i < max; i++) axisA.Add(new Paragraph("Item " + (i + 1)));
 
             max = values.Count;
             count = labels.Count;
-            List<WdParagraph> labelsA = labels.Duplicate();
-            for (int i = count; i < max; i++) labelsA.Add(new WdParagraph("Series " + (i + 1)));
+            List<Paragraph> labelsA = labels.Duplicate();
+            for (int i = count; i < max; i++) labelsA.Add(new Paragraph("Series " + (i + 1)));
 
             count = colors.Count;
 
@@ -367,13 +367,13 @@ namespace WordPlus
             this.PopulateChart(values, labels.DuplicateAsParagraphs(), colors);
         }
 
-        private void PopulateChart(List<double> values, List<WdParagraph> labels, List<Sd.Color> colors)
+        private void PopulateChart(List<double> values, List<Paragraph> labels, List<Sd.Color> colors)
         {
             int max = values.Count;
 
             int count = labels.Count;
-            List<WdParagraph> labelsA = labels.Duplicate();
-            for (int i = count; i < max; i++) labelsA.Add(new WdParagraph("Series " + (i + 1)));
+            List<Paragraph> labelsA = labels.Duplicate();
+            for (int i = count; i < max; i++) labelsA.Add(new Paragraph("Series " + (i + 1)));
 
             count = colors.Count;
 
@@ -433,7 +433,7 @@ namespace WordPlus
                     paragraph.AddHorizontalLine(this.graphic.BorderValue, lineColor.ToSixLabors(), graphic.Weight.ToXmlUint32(),0);
                     break;
                 case ContentTypes.Text:
-                    foreach (WdFragment txt in this.text.Fragments) this.RenderText(this.AddText(paragraph, txt), txt);
+                    foreach (Fragment txt in this.text.Fragments) this.RenderText(this.AddText(paragraph, txt), txt);
                     paragraph.LineSpacing = (int)this.text.LineSpacing*240;
                     if (isParent) { 
                     this.RenderBorder(paragraph.Borders, this.graphic);
@@ -447,7 +447,7 @@ namespace WordPlus
                     for (int i = 0; i < this.values[0].Count; i++)
                     {
                         WD.WordParagraph listLine = wordList.AddItem("", (int)this.numbers[0][i]);
-                        foreach (WdFragment fragment1 in this.values[0][i].Fragments) this.RenderText(this.AddText(listLine, fragment1), fragment1);
+                        foreach (Fragment fragment1 in this.values[0][i].Fragments) this.RenderText(this.AddText(listLine, fragment1), fragment1);
                     }
                     paragraph.Remove();
                     break;
@@ -466,7 +466,7 @@ namespace WordPlus
                         titleCell.MergeHorizontally(numCols);
                         titleCell = table.Rows[0].Cells[0];
                         WD.WordParagraph titleParagraph = titleCell.Paragraphs[0];
-                        foreach (WdFragment fragment1 in this.text.Fragments) this.RenderText(this.AddText(titleParagraph, fragment1), fragment1);
+                        foreach (Fragment fragment1 in this.text.Fragments) this.RenderText(this.AddText(titleParagraph, fragment1), fragment1);
                         titleParagraph.ParagraphAlignment = WP.JustificationValues.Center;
                         titleCell.VerticalAlignment = WP.TableVerticalAlignmentValues.Center;
                     }
@@ -476,7 +476,7 @@ namespace WordPlus
                         for (int j = 0; j < numCols; j++)
                         {
                             WD.WordTableCell cell = table.Rows[i].Cells[j];
-                            WdContent cellContent = this.contents[j][i - r];
+                            Content cellContent = this.contents[j][i - r];
 
                             this.RenderBorder(cell.Borders, cellContent.Graphic);
 
@@ -572,13 +572,13 @@ namespace WordPlus
             }
         }
 
-        protected WD.WordParagraph AddText(WD.WordParagraph paragraph, WdFragment fragment)
+        protected WD.WordParagraph AddText(WD.WordParagraph paragraph, Fragment fragment)
         {
             if (fragment.HasLink) return paragraph.AddHyperLink(fragment.Text, new Uri(fragment.Hyperlink), true);
             return paragraph.AddText(fragment.Text);
         }
 
-        protected void RenderText(WD.WordParagraph paragraph, WdFragment fragment)
+        protected void RenderText(WD.WordParagraph paragraph, Fragment fragment)
         {
             if (fragment.Font.HasFamily) paragraph.SetFontFamily(fragment.Font.Family);
             if (fragment.Font.HasSize) paragraph.SetFontSize((int)fragment.Font.Size);

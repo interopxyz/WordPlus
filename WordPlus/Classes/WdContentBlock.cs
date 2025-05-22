@@ -15,7 +15,7 @@ namespace WordPlus
 
         #region members
 
-        public List<WdContent> contents = new List<WdContent>();
+        public List<Content> contents = new List<Content>();
         public double Width = 0;
         public double Height = 0;
 
@@ -48,23 +48,23 @@ namespace WordPlus
 
         #region methods
 
-        public void Add(WdContent content)
+        public void Add(Content content)
         {
-            this.contents.Add(new WdContent(content));
+            this.contents.Add(new Content(content));
         }
 
-        public void AddRange(List<WdContent> contents)
+        public void AddRange(List<Content> contents)
         {
             this.contents.AddRange(contents.Duplicate());
         }
 
-        public void SetContent(List<WdContent> contents)
+        public void SetContent(List<Content> contents)
         {
             this.contents.Clear();
             this.contents = contents.Duplicate();
         }
 
-        public List<WdContent> GetContents()
+        public List<Content> GetContents()
         {
             return this.contents.Duplicate();
         }
@@ -75,17 +75,17 @@ namespace WordPlus
             if(document.DocObject.Sections[0].ColumnCount!=null)c= (double)document.DocObject.Sections[0].ColumnCount;
             double w = (double)(document.DocObject.Sections[0].PageSettings.Width.Value - document.DocObject.Sections[0].Margins.Left.Value - document.DocObject.Sections[0].Margins.Right.Value) / 15.0 / c;
             double h = (double)(document.DocObject.Sections[0].PageSettings.Height.Value - document.DocObject.Sections[0].Margins.Top.Value - document.DocObject.Sections[0].Margins.Bottom.Value) / 15.0 / c;
-            foreach (WdContent content in this.GetContents()) content.Render(document.DocObject.AddParagraph(), w, h);
+            foreach (Content content in this.GetContents()) content.Render(document.DocObject.AddParagraph(), w, h);
         }
 
         public void Render(WD.WordHeader header)
         {
-            foreach (WdContent content in this.GetContents()) content.Render(header.AddParagraph(), this.Width, this.Height);
+            foreach (Content content in this.GetContents()) content.Render(header.AddParagraph(), this.Width, this.Height);
         }
 
         public void Render(WD.WordFooter footer)
         {
-            foreach (WdContent content in this.GetContents()) content.Render(footer.AddParagraph(), this.Width, this.Height);
+            foreach (Content content in this.GetContents()) content.Render(footer.AddParagraph(), this.Width, this.Height);
         }
 
             #endregion

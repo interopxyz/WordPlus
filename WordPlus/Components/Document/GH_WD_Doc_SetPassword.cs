@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Document
+namespace WordPlus.Components
 {
     public class GH_WD_Doc_SetPassword : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Document
         /// Initializes a new instance of the GH_WD_Doc_SetPassword class.
         /// </summary>
         public GH_WD_Doc_SetPassword()
-          : base("Document Password", "WD Pass",
-              "Sets a password on a document. (Note: Make sure to save this password as this action is irreversable on the output doucment.",
+          : base("Word Document Password", "WD Pass",
+              "Sets a password on a Word document. (Note: Make sure to save this password as this action is irreversable on the output doucment.",
               Constants.ShortName, Constants.SubDocument)
         {
         }

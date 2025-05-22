@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Text
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_TextSplit : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Text
         /// Initializes a new instance of the GH_WD_Txt_Mod_GetFragments class.
         /// </summary>
         public GH_WD_Txt_Mod_TextSplit()
-          : base("Split Paragraph", "SplitPara",
-              "Splits a Text Paragraph Object into it's Text Fragment Objects and Text Strings",
+          : base("Split Word Paragraph", "WD SplitPara",
+              "Splits a Word Text Paragraph Object into it's Text Fragment Objects and Text Strings",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -46,17 +46,17 @@ namespace WordPlus.Components.Text
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            if (!gooA.TryGetParagraph(out WdParagraph paragraph))
+            if (!gooA.TryGetParagraph(out Paragraph paragraph))
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Txt input must be a Text Paragraph Object, Text Fragment Object or a string");
                 return;
             }
 
-            List<WdFragment> fragments = new List<WdFragment>();
+            List<Fragment> fragments = new List<Fragment>();
             List<string> texts = new List<string>();
-            foreach (WdFragment fragment in paragraph.Fragments)
+            foreach (Fragment fragment in paragraph.Fragments)
             {
-                fragments.Add(new WdFragment(fragment));
+                fragments.Add(new Fragment(fragment));
                 texts.Add(fragment.Text);
             }
 

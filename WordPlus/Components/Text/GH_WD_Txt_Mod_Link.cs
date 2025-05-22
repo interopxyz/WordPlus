@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace WordPlus.Components.Text
+namespace WordPlus.Components
 {
     public class GH_WD_Txt_Mod_Link : GH_Component
     {
@@ -13,8 +13,8 @@ namespace WordPlus.Components.Text
         /// Initializes a new instance of the GH_WD_Txt_Mod_Link class.
         /// </summary>
         public GH_WD_Txt_Mod_Link()
-          : base("Content Link", "ConLink",
-              "Modify Content Link if applicable",
+          : base("Word Content Link", "WD ConLink",
+              "Modify Word Content Link if applicable",
               Constants.ShortName, Constants.Format)
         {
         }
@@ -50,9 +50,9 @@ namespace WordPlus.Components.Text
             IGH_Goo gooA = null;
             if (!DA.GetData(0, ref gooA)) return;
 
-            WdParagraph paragraph = null;
+            Paragraph paragraph = null;
             bool isParagraph = false;
-            WdFragment fragment = null;
+            Fragment fragment = null;
 
             if (gooA.TryCastToParagraph(out paragraph))
             {
@@ -69,7 +69,7 @@ namespace WordPlus.Components.Text
             {
                 if (isParagraph)
                 {
-                    foreach (WdFragment f in paragraph.Fragments) f.Hyperlink = link;
+                    foreach (Fragment f in paragraph.Fragments) f.Hyperlink = link;
                 }
                 else
                 {

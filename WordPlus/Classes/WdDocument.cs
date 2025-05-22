@@ -39,7 +39,7 @@ namespace WordPlus
         string password = string.Empty;
 
 
-        public WdPage Page = new WdPage();
+        public Page Page = new Page();
         public Graphic graphic = new Graphic();
         
         #endregion
@@ -78,7 +78,7 @@ namespace WordPlus
             this.modified = document.modified;
             this.password = document.password;
 
-            this.Page = new WdPage(document.Page);
+            this.Page = new Page(document.Page);
             this.graphic = new Graphic(document.graphic);
         }
 
@@ -89,7 +89,7 @@ namespace WordPlus
             for(int i =0;i<documents.Count;i++)
             {
                 this.content.AddRange(documents[i].GetContents());
-                if (pageBreak) if (i < (documents.Count - 1)) this.content.Add(WdContent.CreatePageBreakContent());
+                if (pageBreak) if (i < (documents.Count - 1)) this.content.Add(Content.CreatePageBreakContent());
             }
 
             int c = documents.Count - 1;
@@ -100,7 +100,7 @@ namespace WordPlus
             this.FooterType= documents[c].FooterType;
 
             this.name = name;
-            this.Page = new WdPage(documents[c].Page);
+            this.Page = new Page(documents[c].Page);
         }
 
         #endregion
@@ -176,17 +176,17 @@ namespace WordPlus
 
         #region methods
 
-        public void AddContent(WdContent content)
+        public void AddContent(Content content)
         {
             this.content.Add(content);
         }
 
-        public void SetContent(List<WdContent> contents)
+        public void SetContent(List<Content> contents)
         {
             this.content.SetContent(contents);
         }
 
-        public List<WdContent> GetContents()
+        public List<Content> GetContents()
         {
             return this.content.GetContents();
         }
@@ -207,7 +207,7 @@ namespace WordPlus
             this.DocObject.Sections[0].Margins.Top = (int)this.Page.MarginTop;
             this.DocObject.Sections[0].Margins.Bottom = (int)this.Page.MarginBottom;
 
-            if (this.Page.Orientation == WdPage.Orientations.Landscape) this.DocObject.Sections[0].PageSettings.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            if (this.Page.Orientation == Page.Orientations.Landscape) this.DocObject.Sections[0].PageSettings.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
             if (this.Page.Columns > 1) this.DocObject.Sections[0].ColumnCount = this.Page.Columns;
 
             //Page Graphics
@@ -314,13 +314,13 @@ namespace WordPlus
             }
         }
 
-        public void SaveDocument(string filepath)
+        public void Save(string filepath)
         {
             this.Render();
             this.DocObject.Save(filepath, false);
         }
 
-        public string StreamDocument()
+        public string Stream()
         {
             this.Render();
             Stream stream = new MemoryStream();
@@ -328,8 +328,9 @@ namespace WordPlus
             stream.Position = 0;
             var buffer = new byte[stream.Length];
             stream.Read(buffer, 0, (int)stream.Length);
-
-            return System.Text.Encoding.Default.GetString(buffer);
+            string output = System.Text.Encoding.Default.GetString(buffer);
+            stream.Dispose();
+            return output;
         }
 
         #endregion

@@ -13,8 +13,8 @@ namespace WordPlus.Components
         /// Initializes a new instance of the GH_WB_Doc_Construct class.
         /// </summary>
         public GH_WD_Doc_PageConstruct()
-          : base("Construct Document", "Document",
-              "Construct a Document",
+          : base("Construct Word Document", "WD Doc",
+              "Construct a Word Document",
               Constants.ShortName, Constants.SubDocument)
         {
         }
@@ -42,7 +42,7 @@ namespace WordPlus.Components
             }
 
             Param_Integer paramC = (Param_Integer)pManager[3];
-            foreach (WdPage.Margins value in Enum.GetValues(typeof(WdPage.Margins)))
+            foreach (Page.Margins value in Enum.GetValues(typeof(Page.Margins)))
             {
                 paramC.AddNamedValue((int)value + " | " + value.ToString(), (int)value);
             }
@@ -96,7 +96,7 @@ namespace WordPlus.Components
 
             int margin = 0;
             DA.GetData(3, ref margin);
-            document.Page.SetMargin((WdPage.Margins)margin);
+            document.Page.SetMargin((Page.Margins)margin);
 
             DA.SetData(0, document);
         }
