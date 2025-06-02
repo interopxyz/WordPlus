@@ -61,11 +61,12 @@ namespace WordPlus
             this.height = content.height;
 
             this.text = new Paragraph(content.text);
-            this.image = new Sd.Bitmap(content.image);
             this.values = content.values.Duplicate();
             this.numbers = content.numbers.Duplicate();
             this.colors = content.colors.Duplicate();
             this.contents = content.contents.Duplicate();
+
+            this.image = new Sd.Bitmap(content.image);
 
             this.bulletStyle = content.bulletStyle;
         }
@@ -319,6 +320,41 @@ namespace WordPlus
             set { this.text = new Paragraph(value); }
         }
 
+        public virtual List<Paragraph> TextList
+        {
+            get
+            {
+                List<Paragraph> output = new List<Paragraph>();
+                foreach (Paragraph paragraph in values[0]) output.Add(new Paragraph(paragraph));
+                return output;
+            }
+        }
+
+        public virtual List<List<double>> Numbers
+        {
+            get { return this.numbers.Duplicate(); }
+        }
+
+        public virtual List<List<Paragraph>> Values
+        {
+            get { return this.values.Duplicate(); }
+        }
+
+        public virtual List<List<Content>> Contents
+        {
+            get { return this.contents.Duplicate(); }
+        }
+
+        public virtual List<List<Sd.Color>> Colors
+        {
+            get { return this.colors.Duplicate(); }
+        }
+
+        public virtual Sd.Bitmap Image
+        {
+            get { return new Sd.Bitmap(this.image); }
+        }
+
         public virtual ContentTypes ContentType
         {
             get { return this.type; }
@@ -433,10 +469,17 @@ namespace WordPlus
                     paragraph.AddHorizontalLine(this.graphic.BorderValue, lineColor.ToSixLabors(), graphic.Weight.ToXmlUint32(),0);
                     break;
                 case ContentTypes.Text:
+                    
                     foreach (Fragment txt in this.text.Fragments) this.RenderText(this.AddText(paragraph, txt), txt);
+
                     paragraph.LineSpacing = (int)this.text.LineSpacing*240;
+                    if (this.text.HasIndentBefore) paragraph.IndentationBefore = this.text.IndentBefore;
+                    if (this.text.HasIndentAfter) paragraph.IndentationAfter = this.text.IndentAfter;
+                    if (this.text.HasIndentFirstLine) paragraph.IndentationFirstLine = this.text.IndentFirstLine;
+                    if (this.text.HasIndentHanging) paragraph.IndentationHanging = this.text.IndentHanging;
+
                     if (isParent) { 
-                    this.RenderBorder(paragraph.Borders, this.graphic);
+                    this.RenderBorder(paragraph.Borders, this.text.Graphic);
                     paragraph.SetColor(SixLabors.ImageSharp.Color.Aquamarine);
                     }
                     break;
@@ -574,12 +617,18 @@ namespace WordPlus
 
         protected WD.WordParagraph AddText(WD.WordParagraph paragraph, Fragment fragment)
         {
+            string text = fragment.Text;
+            //if (fragment.HasTabs) paragraph.AddTabStop(0, WP.TabStopValues.Left);
+            if (fragment.HasTabs) paragraph.AddTab();
+            //if(fragment.HasTabs)text = "\t " + text;
+
             if (fragment.HasLink) return paragraph.AddHyperLink(fragment.Text, new Uri(fragment.Hyperlink), true);
-            return paragraph.AddText(fragment.Text);
+            return paragraph.AddText(text);
         }
 
         protected void RenderText(WD.WordParagraph paragraph, Fragment fragment)
         {
+            paragraph.SetStyle(font.ToStyle());
             if (fragment.Font.HasFamily) paragraph.SetFontFamily(fragment.Font.Family);
             if (fragment.Font.HasSize) paragraph.SetFontSize((int)fragment.Font.Size);
             if (fragment.Font.HasColor) paragraph.SetColor(fragment.Font.Color.ToSixLabors());
@@ -669,7 +718,6 @@ namespace WordPlus
             }
         }
 
-
         //Render Borders on Paragraphs
         protected void RenderBorder(WD.WordParagraphBorders border, Graphic graphic)
         {
@@ -702,6 +750,7 @@ namespace WordPlus
             }
         }
 
+
         #endregion
 
         #region overrides
@@ -711,7 +760,7 @@ namespace WordPlus
             switch (this.type)
             {
                 default:
-                    if (this.text.Text.Length < 16) return "Wd | " + this.type + " {" + this.text.Text + "}";
+                    if (this.text.Text.Length < 16) return "WD | " + this.type + " {" + this.text.Text + "}";
                     return "WD | " + this.type + " {" + this.text.Text.Substring(0, 15) + "...}";
                 case ContentTypes.List:
                     return "WD | List {" + this.values[0].Count + "i}";

@@ -5,8 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Sd = System.Drawing;
 using WD = OfficeIMO.Word;
+using DocumentFormat.OpenXml.Wordprocessing;
 using WP = DocumentFormat.OpenXml.Wordprocessing;
+using DP = DocumentFormat.OpenXml.Packaging;
+using DC = DocumentFormat.OpenXml.Drawing.Charts;
+using DF = DocumentFormat.OpenXml.Drawing;
 
 namespace WordPlus
 {
@@ -16,7 +21,7 @@ namespace WordPlus
         #region members
 
         public enum Units { Pixels, Inches, Millimeters, Centimeters };
-        public enum HeaderFooterTypes { None,All, Even, First };
+        public enum HeaderFooterTypes { None, All, Even, First };
 
         public HeaderFooterTypes HeaderType = HeaderFooterTypes.None;
         public HeaderFooterTypes FooterType = HeaderFooterTypes.None;
@@ -38,10 +43,9 @@ namespace WordPlus
         string modified = string.Empty;
         string password = string.Empty;
 
-
         public Page Page = new Page();
         public Graphic graphic = new Graphic();
-        
+
         #endregion
 
         #region constructors
@@ -86,7 +90,7 @@ namespace WordPlus
         {
             this.DocObject = WD.WordDocument.Create();
 
-            for(int i =0;i<documents.Count;i++)
+            for (int i = 0; i < documents.Count; i++)
             {
                 this.content.AddRange(documents[i].GetContents());
                 if (pageBreak) if (i < (documents.Count - 1)) this.content.Add(Content.CreatePageBreakContent());
@@ -97,10 +101,32 @@ namespace WordPlus
             this.Footer = new WdContentBlock(documents[c].Footer);
 
             this.HeaderType = documents[c].HeaderType;
-            this.FooterType= documents[c].FooterType;
+            this.FooterType = documents[c].FooterType;
 
             this.name = name;
             this.Page = new Page(documents[c].Page);
+        }
+
+        public static WdDocument LoadDocument(string filePath)
+        {
+            WdDocument document = new WdDocument();
+            WD.WordDocument doc = WD.WordDocument.Load(filePath,true, false);
+
+            document.ParseDocument(doc);
+
+            return document;
+        }
+
+        public static WdDocument ReadDocument(string streamText)
+        {
+            MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(streamText));
+            stream.Position = 0;
+            WdDocument document = new WdDocument();
+            WD.WordDocument doc = WD.WordDocument.Load(stream, true, false);
+
+            document.ParseDocument(doc);
+
+            return document;
         }
 
         #endregion
@@ -176,6 +202,310 @@ namespace WordPlus
 
         #region methods
 
+        protected void ParseDocument(WD.WordDocument doc)
+        {
+
+            if (doc.PageSettings.Orientation == WP.PageOrientationValues.Landscape) this.Page.Orientation = Page.Orientations.Landscape;
+            this.Page.PageWidth = (int)doc.PageSettings.Width.Value;
+            this.Page.PageHeight = (int)doc.PageSettings.Height.Value;
+
+            Paragraph mergedPara = new Paragraph();
+            List<Paragraph> listItems = new List<Paragraph>();
+            List<int> listIndices = new List<int>();
+            int i = 0;
+            int c = 0;
+            int inset = 0;
+            foreach (WD.WordElement element in doc.Elements)
+            {
+                if (element is WD.WordParagraph)
+                {
+                    WD.WordParagraph paragraph = (WD.WordParagraph)element;
+                    if (paragraph.IsListItem)
+                    {
+                        Fragment frag = new Fragment(paragraph.Text, paragraph.GetFont());
+                        if (paragraph.IsTab) frag.Tabs = 1;
+                        if (paragraph.IsFirstRun) mergedPara = new Paragraph();
+
+                        mergedPara.Fragments.Add(frag);
+                        inset = Math.Max(paragraph.ListItemLevel.GetValueOrDefault(0), inset);
+                        if (paragraph.IsLastRun)
+                        {
+                            listItems.Add(mergedPara);
+                            listIndices.Add(inset);
+                            inset = 0;
+                        }
+
+                        bool nextList = false;
+                        if ((i + 2) > doc.Paragraphs.Count)
+                        {
+                            nextList = true;
+                        }
+                        else if (!doc.Paragraphs[i + 1].IsListItem)
+                        {
+                            nextList = true;
+                        }
+                        if (nextList)
+                        {
+                            this.AddContent(Content.CreateListContent(listItems, listIndices, Content.BulletPoints.Bulleted));
+                            listItems = new List<Paragraph>();
+                            listIndices = new List<int>();
+                        }
+                    }
+                    if (paragraph.IsImage)
+                    {
+                        this.AddContent(this.ParseImage(paragraph, doc));
+                    }
+                    else if (paragraph.IsChart)
+                    {
+                        this.AddContent(this.ParseChart(paragraph, doc,c));
+                        c++;
+                    }
+                    else if (paragraph.IsBreak)
+                    {
+                        this.AddContent(Content.CreateHorizontalLineContent());
+                    }
+                    else if (paragraph.IsPageBreak)
+                    {
+                        this.AddContent(Content.CreatePageBreakContent());
+                    }
+                    else if (!paragraph.IsListItem)
+                    {
+                        Fragment frag = new Fragment(paragraph.Text, paragraph.GetFont());
+                        if (paragraph.IsTab) frag.Tabs = 1;
+                        if (paragraph.IsFirstRun) mergedPara = new Paragraph();
+
+                        mergedPara.Fragments.Add(frag);
+                        if (paragraph.IsLastRun) this.AddContent(Content.CreateTextContent(mergedPara));
+                    }
+                }
+                else if (element is WD.WordTable)
+                {
+                    this.AddContent(this.ParseTable((WD.WordTable)element, doc));
+                }
+                i++;
+            }
+
+        }
+
+        protected Content ParseTable(WD.WordTable table, WD.WordDocument doc)
+        {
+            List<List<Content>> content = new List<List<Content>>();
+
+            int r = table.RowsCount;
+            int c = table.Rows[0].Cells.Count;
+
+            for (int i = 0; i<c;i++)
+            {
+                content.Add(new List<Content>());
+                for (int j = 0; j < r; j++)
+                {
+                    WD.WordTableCell cell = table.Rows[j].Cells[i];
+                    Paragraph mergedPara = new Paragraph();
+                    List<WD.WordParagraph> paragraphs = cell.Paragraphs;
+                    List<Paragraph> listItems = new List<Paragraph>();
+                    List<int> listIndices = new List<int>();
+                    int inset = 0;
+
+                    foreach (WD.WordParagraph paragraph in paragraphs)
+                    {
+                        if (paragraph.IsListItem)
+                        {
+                            Fragment frag = new Fragment(paragraph.Text, paragraph.GetFont());
+                            if (paragraph.IsTab) frag.Tabs = 1;
+                            if (paragraph.IsFirstRun) mergedPara = new Paragraph();
+
+                            mergedPara.Fragments.Add(frag);
+                            inset = Math.Max(paragraph.ListItemLevel.GetValueOrDefault(0), inset);
+                            if (paragraph.IsLastRun)
+                            {
+                                listItems.Add(mergedPara);
+                                listIndices.Add(inset);
+                                inset = 0;
+                            }
+
+                            bool nextList = false;
+                            if ((i + 2) > doc.Paragraphs.Count)
+                            {
+                                nextList = true;
+                            }
+                            else if (!doc.Paragraphs[i + 1].IsListItem)
+                            {
+                                nextList = true;
+                            }
+                            if (nextList)
+                            {
+                                this.AddContent(Content.CreateListContent(listItems, listIndices, Content.BulletPoints.Bulleted));
+                                listItems = new List<Paragraph>();
+                                listIndices = new List<int>();
+                            }
+                        }
+                        if (paragraph.IsImage)
+                        {
+                            content[i].Add(this.ParseImage(paragraph, doc));
+                        }
+                        else if (paragraph.IsChart)
+                        {
+                            //content[i].Add(this.ParseChart(paragraph,doc,0));
+                        }
+                        else if(cell.HasNestedTables)
+                        {
+                            content[i].Add(this.ParseTable(cell.NestedTables[i],doc));
+                        }
+                        else if (!paragraph.IsListItem)
+                        {
+                            Fragment frag = new Fragment(paragraph.Text, paragraph.GetFont());
+                            if (paragraph.IsTab) frag.Tabs = 1;
+                            if (paragraph.IsFirstRun) mergedPara = new Paragraph();
+
+                            mergedPara.Fragments.Add(frag);
+                            if (paragraph.IsLastRun) content[i].Add(Content.CreateTextContent(mergedPara));
+                        }
+                        content[i][content[i].Count - 1].Graphic.SetGraphic(cell);
+                    }
+                }
+            }
+
+             return Content.CreateTableContent(content);
+
+        }
+
+        protected Content ParseChart(WD.WordParagraph paragraph, WD.WordDocument doc,int index)
+        {
+
+            List<List<double>> values = new List<List<double>>();
+            List<string> axis = new List<string>();
+            List<string> labels = new List<string>();
+            List<Sd.Color> colors = new List<Sd.Color>();
+
+            List<DP.ChartPart> chartParts = doc._wordprocessingDocument.MainDocumentPart.ChartParts.ToList();
+            DP.ChartPart chartPart = chartParts[Math.Min(index,chartParts.Count-1)];
+            DC.Chart chart = chartPart.ChartSpace.Elements<DC.Chart>().FirstOrDefault();
+
+            //WP.Drawing drawing = paragraph..Descendants<Drawing>().FirstOrDefault();
+            //var chartReference = drawing.Inline.Graphic.GraphicData.GetFirstChild<ChartReference>();
+            //string relId = chartReference.Id;
+            //DP.ChartPart chartPart = (DP.ChartPart)doc._wordprocessingDocument.MainDocumentPart.GetPartById(relId);
+            //DC.Chart chart = chartPart.ChartSpace.Elements<DC.Chart>().FirstOrDefault();
+
+            DC.Title title = chart.Elements<DC.Title>().ToList()[0];
+            string titleText = "";
+            if (title.InnerText != null) titleText = title.InnerText;
+
+            int i = 0;
+
+            if (chart.PlotArea.Elements<DC.BarChart>().FirstOrDefault() != null)
+            {
+                foreach (DC.BarChart chartObj in chart.PlotArea.Elements<DC.BarChart>().ToList())
+                {
+                    foreach (DC.BarChartSeries series in chartObj.Elements<DC.BarChartSeries>())
+                    {
+                        labels.Add(series.SeriesText.InnerText);
+                        colors.Add(this.GetLegendColor(series.Elements<DC.ChartShapeProperties>().ToList()[0]));
+                        if (i == 0) axis.AddRange(this.GetAxisLabels(series.GetFirstChild<DC.CategoryAxisData>()));
+
+                        values.Add(this.GetSeriesNumbers(series.GetFirstChild<DC.Values>()));
+                        i++;
+                    }
+                }
+                return Content.CreateChartBarContent(titleText, values, axis, labels, colors, Content.LegendLocations.None);
+            }
+
+            if (chart.PlotArea.Elements<DC.LineChart>().FirstOrDefault() != null)
+            {
+                foreach (DC.LineChart chartObj in chart.PlotArea.Elements<DC.LineChart>().ToList())
+            {
+                foreach (DC.LineChartSeries series in chartObj.Elements<DC.LineChartSeries>())
+                {
+                    labels.Add(series.SeriesText.InnerText);
+                    colors.Add(this.GetLegendColor(series.Elements<DC.ChartShapeProperties>().ToList()[0]));
+                    if (i == 0) axis.AddRange(this.GetAxisLabels(series.GetFirstChild<DC.CategoryAxisData>()));
+
+                    values.Add(this.GetSeriesNumbers(series.GetFirstChild<DC.Values>()));
+                    i++;
+                }
+                }
+                return Content.CreateChartLineContent(titleText, values, axis, labels, colors, Content.LegendLocations.None);
+            }
+
+            if (chart.PlotArea.Elements<DC.AreaChart>().FirstOrDefault() != null)
+                {
+                    foreach (DC.AreaChart chartObj in chart.PlotArea.Elements<DC.AreaChart>().ToList())
+            {
+                foreach (DC.AreaChartSeries series in chartObj.Elements<DC.AreaChartSeries>())
+                {
+                    labels.Add(series.SeriesText.InnerText);
+                    colors.Add(this.GetLegendColor(series.Elements<DC.ChartShapeProperties>().ToList()[0]));
+                    if (i == 0) axis.AddRange(this.GetAxisLabels(series.GetFirstChild<DC.CategoryAxisData>()));
+
+                    values.Add(this.GetSeriesNumbers(series.GetFirstChild<DC.Values>()));
+                    i++;
+                }
+                }
+                return Content.CreateChartAreaContent(titleText, values, axis, labels, colors, Content.LegendLocations.None);
+            }
+
+            if (chart.PlotArea.Elements<DC.PieChart>().FirstOrDefault() != null)
+                    {
+                        foreach (DC.PieChart chartObj in chart.PlotArea.Elements<DC.PieChart>().ToList())
+            {
+                foreach (DC.PieChartSeries series in chartObj.Elements<DC.PieChartSeries>())
+                {
+                    labels.Add(series.SeriesText.InnerText);
+                    //colors.Add(this.GetLegendColor(series.Elements<DC.ChartShapeProperties>().ToList()[0]));
+                    if (i == 0) axis.AddRange(this.GetAxisLabels(series.GetFirstChild<DC.CategoryAxisData>()));
+
+                    values.Add(this.GetSeriesNumbers(series.GetFirstChild<DC.Values>()));
+                    i++;
+                }
+                }
+                return Content.CreateChartPieContent(titleText, values[0], labels, colors, Content.LegendLocations.None);
+            }
+
+            return null;
+        }
+
+        protected List<double> GetSeriesNumbers(DC.Values valuesElement)
+        {
+            List<double> output = new List<double>();
+
+            List<DC.NumericPoint> numbers = valuesElement.NumberLiteral.Elements<DC.NumericPoint>().ToList();
+            foreach (DC.NumericPoint num in numbers)
+            {
+                Double.TryParse(num.NumericValue.Text, out double val);
+                output.Add(val);
+            }
+            return output;
+        }
+
+        protected List<string> GetAxisLabels(DC.CategoryAxisData categoryAxisData)
+        {
+            List<string> output = new List<string>();
+            List<DC.StringPoint> points = categoryAxisData.StringLiteral.Elements<DC.StringPoint>().ToList();
+            foreach (DC.StringPoint pt in points) output.Add(pt.InnerText);
+            return output;
+        }
+
+        protected Sd.Color GetLegendColor(DC.ChartShapeProperties shapeProp)
+        {
+            DF.SolidFill fill = shapeProp.Elements<DF.SolidFill>().ToList()[0];
+            return Extension.ColorFromHex(fill.RgbColorModelHex.Val);
+        }
+
+        protected Content ParseImage(WD.WordParagraph paragraph, WD.WordDocument doc)
+        {
+            string id = paragraph.Image.RelationshipId;
+            DP.MainDocumentPart mainPart = doc._wordprocessingDocument.MainDocumentPart;
+
+            DP.ImagePart imagePart = (DP.ImagePart)mainPart.GetPartById(id);
+
+            Stream memoryStream = imagePart.GetStream();
+            memoryStream.Position = 0;
+            Content output = Content.CreateImageContent(new Sd.Bitmap(memoryStream));
+            memoryStream.Dispose();
+
+            return output;
+        }
+
         public void AddContent(Content content)
         {
             this.content.Add(content);
@@ -250,7 +580,8 @@ namespace WordPlus
             {
                 this.DocObject.AddHeadersAndFooters();
             }
-            if (this.Header.Count > 0) {
+            if (this.Header.Count > 0)
+            {
                 switch (this.HeaderType)
                 {
                     case HeaderFooterTypes.All:
@@ -289,7 +620,7 @@ namespace WordPlus
             {
                 border.TopStyle = graphic.BorderValue;
                 border.TopColor = graphic.Stroke.ToSixLabors();
-                border.TopSize= graphic.Weight.ToXmlUint32();
+                border.TopSize = graphic.Weight.ToXmlUint32();
             }
 
             if (graphic.BottomBorder)
@@ -339,7 +670,7 @@ namespace WordPlus
 
         public override string ToString()
         {
-            return "WD | Document: " + this.name + " {c:" + this.content.Count+"}" ;
+            return "WD | Document: " + this.name + " {c:" + this.content.Count + "}";
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel.Types;
+﻿using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,91 @@ namespace WordPlus
     {
 
         #region conversions
+
+        public static Font GetFont(this WD.WordParagraph input)
+        {
+            Font font = new Font();
+            if(input.Style.HasValue)font = input.Style.Value.ToFont();
+
+            font.Family = input.FontFamily;
+            if(input.FontSize.HasValue)font.Size = input.FontSize.Value;
+            if(input.Color.HasValue)font.Color = input.Color.Value.ToColor();
+            font.Bold = input.Bold;
+            font.Italic = input.Italic;
+            font.Underlined = input.Underline.HasValue;
+            font.Strikethrough = input.Strike;
+            if(input.Highlight.HasValue)font.Highlight = input.Highlight.Value.ToWordPlus();
+            if (input.VerticalTextAlignment.HasValue) font.Subscript = input.VerticalTextAlignment.Value == WP.VerticalPositionValues.Subscript;
+            if (input.VerticalTextAlignment.HasValue) font.Superscript = input.VerticalTextAlignment.Value == WP.VerticalPositionValues.Superscript;
+            if (input.ParagraphAlignment.HasValue) font.HorizontalAlignment = input.ParagraphAlignment.Value.ToWordPlus();
+            if (input.LineSpacing.HasValue) font.LineSpacing = input.LineSpacing.Value;
+
+            return font;
+        }
+
+        public static Sd.Color ToColor(this SixLabors.ImageSharp.Color input)
+        {
+            return input.ToHex().ColorFromHex();
+        }
+
+        public static Sd.Color ColorFromHex(this string input)
+        {
+            if (input.StartsWith("#"))
+                input = input.Substring(1);
+
+            // Parse RGB
+            int r = Convert.ToInt32(input.Substring(0, 2), 16);
+            int g = Convert.ToInt32(input.Substring(2, 2), 16);
+            int b = Convert.ToInt32(input.Substring(4, 2), 16);
+
+            return Sd.Color.FromArgb(r, g, b);
+        }
+
+        public static WD.WordParagraphStyles ToStyle(this Font input)
+        {
+            switch (input.Name)
+            {
+                default:
+                    return WD.WordParagraphStyles.Custom;
+                case "Normal":
+                    return WD.WordParagraphStyles.Normal;
+                case "Heading1":
+                    return WD.WordParagraphStyles.Heading1;
+                case "Heading2":
+                    return WD.WordParagraphStyles.Heading2;
+                case "Heading3":
+                    return WD.WordParagraphStyles.Heading3;
+                case "Heading4":
+                    return WD.WordParagraphStyles.Heading4;
+                case "Heading5":
+                    return WD.WordParagraphStyles.Heading5;
+                case "Heading6":
+                    return WD.WordParagraphStyles.Heading6;
+            }
+        }
+
+        public static Font ToFont(this WD.WordParagraphStyles input)
+        {
+            switch (input)
+            {
+                default:
+                    return new Font();
+                case WD.WordParagraphStyles.Normal:
+                    return Fonts.Normal;
+                case WD.WordParagraphStyles.Heading1:
+                    return Fonts.Heading1;
+                case WD.WordParagraphStyles.Heading2:
+                    return Fonts.Heading2;
+                case WD.WordParagraphStyles.Heading3:
+                    return Fonts.Heading3;
+                case WD.WordParagraphStyles.Heading4:
+                    return Fonts.Heading4;
+                case WD.WordParagraphStyles.Heading5:
+                    return Fonts.Heading5;
+                case WD.WordParagraphStyles.Heading6:
+                    return Fonts.Heading6;
+            }
+        }
 
         public static SixLabors.ImageSharp.Color ToSixLabors(this Sd.Color input)
         {
@@ -64,58 +150,86 @@ namespace WordPlus
             }
         }
 
-        public static DocumentFormat.OpenXml.Wordprocessing.JustificationValues ToOpenXml(this Font.HorizontalAlignments input)
+        public static WP.JustificationValues ToOpenXml(this Font.HorizontalAlignments input)
         {
             switch (input)
             {
                 default:
-                    return DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Left;
+                    return WP.JustificationValues.Left;
                 case Font.HorizontalAlignments.Center:
-                    return DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center;
+                    return WP.JustificationValues.Center;
                 case Font.HorizontalAlignments.Right:
-                    return DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right;
+                    return WP.JustificationValues.Right;
             }
         }
 
-        public static DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues ToOpenXml(this Font.HighlightColors input)
+        public static Font.HorizontalAlignments ToWordPlus(this WP.JustificationValues input)
+        {
+            if (input == WP.JustificationValues.Center) return Font.HorizontalAlignments.Center;
+            if (input == WP.JustificationValues.Right) return Font.HorizontalAlignments.Right;
+            return Font.HorizontalAlignments.Left;
+        }
+
+        public static WP.HighlightColorValues ToOpenXml(this Font.HighlightColors input)
         {
             switch (input)
             {
                 default:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.None;
+                    return WP.HighlightColorValues.None;
                 case Font.HighlightColors.Black:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Black;
+                    return WP.HighlightColorValues.Black;
                 case Font.HighlightColors.Blue:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Blue;
+                    return WP.HighlightColorValues.Blue;
                 case Font.HighlightColors.Cyan:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Cyan;
+                    return WP.HighlightColorValues.Cyan;
                 case Font.HighlightColors.DarkBlue:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkBlue;
+                    return WP.HighlightColorValues.DarkBlue;
                 case Font.HighlightColors.DarkCyan:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkCyan;
+                    return WP.HighlightColorValues.DarkCyan;
                 case Font.HighlightColors.DarkGray:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkGray;
+                    return WP.HighlightColorValues.DarkGray;
                 case Font.HighlightColors.DarkGreen:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkGreen;
+                    return WP.HighlightColorValues.DarkGreen;
                 case Font.HighlightColors.DarkMagenta:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkMagenta;
+                    return WP.HighlightColorValues.DarkMagenta;
                 case Font.HighlightColors.DarkRed:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkRed;
+                    return WP.HighlightColorValues.DarkRed;
                 case Font.HighlightColors.DarkYellow:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.DarkYellow;
+                    return WP.HighlightColorValues.DarkYellow;
                 case Font.HighlightColors.Green:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Green;
+                    return WP.HighlightColorValues.Green;
                 case Font.HighlightColors.LightGray:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.LightGray;
+                    return WP.HighlightColorValues.LightGray;
                 case Font.HighlightColors.Magenta:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Magenta;
+                    return WP.HighlightColorValues.Magenta;
                 case Font.HighlightColors.Red:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Red;
+                    return WP.HighlightColorValues.Red;
                 case Font.HighlightColors.White:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.White;
+                    return WP.HighlightColorValues.White;
                 case Font.HighlightColors.Yellow:
-                    return DocumentFormat.OpenXml.Wordprocessing.HighlightColorValues.Yellow;
+                    return WP.HighlightColorValues.Yellow;
             }
+        }
+
+        public static Font.HighlightColors ToWordPlus(this WP.HighlightColorValues input)
+        {
+            if (input == WP.HighlightColorValues.Black) return Font.HighlightColors.Black;
+            if (input == WP.HighlightColorValues.Blue) return Font.HighlightColors.Blue;
+            if (input == WP.HighlightColorValues.Cyan) return Font.HighlightColors.Cyan;
+            if (input == WP.HighlightColorValues.DarkBlue) return Font.HighlightColors.DarkBlue;
+            if (input == WP.HighlightColorValues.DarkCyan) return Font.HighlightColors.DarkCyan;
+            if (input == WP.HighlightColorValues.DarkGreen) return Font.HighlightColors.DarkGreen;
+            if (input == WP.HighlightColorValues.DarkMagenta) return Font.HighlightColors.DarkMagenta;
+            if (input == WP.HighlightColorValues.DarkRed) return Font.HighlightColors.DarkRed;
+            if (input == WP.HighlightColorValues.DarkYellow) return Font.HighlightColors.DarkYellow;
+            if (input == WP.HighlightColorValues.Green) return Font.HighlightColors.Green;
+            if (input == WP.HighlightColorValues.LightGray) return Font.HighlightColors.LightGray;
+            if (input == WP.HighlightColorValues.Magenta) return Font.HighlightColors.Magenta;
+            if (input == WP.HighlightColorValues.Red) return Font.HighlightColors.Red;
+            if (input == WP.HighlightColorValues.White) return Font.HighlightColors.White;
+            if (input == WP.HighlightColorValues.Yellow) return Font.HighlightColors.Yellow;
+            return Font.HighlightColors.None;
+
         }
 
         public static DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues ToOpenXml(this Content.LegendLocations input)
@@ -131,6 +245,32 @@ namespace WordPlus
                 case Content.LegendLocations.Top:
                     return DocumentFormat.OpenXml.Drawing.Charts.LegendPositionValues.Top;
             }
+        }
+
+        public static GH_Structure<GH_ObjectWrapper> ToDataTree(this List<List<Content>> input, GH_Path path)
+        {
+            GH_Structure<GH_ObjectWrapper> ghData = new GH_Structure<GH_ObjectWrapper>();
+            for (int i = 0; i < input.Count; i++)
+            {
+                for (int j = 0; j < input[i].Count; j++)
+                {
+                    ghData.Append(new GH_ObjectWrapper(input[i][j]), path.AppendElement(i));
+                }
+            }
+            return ghData;
+        }
+
+        public static GH_Structure<GH_Number> ToDataTree(this List<List<double>> input, GH_Path path)
+        {
+            GH_Structure<GH_Number> ghData = new GH_Structure<GH_Number>();
+            for (int i = 0; i < input.Count; i++)
+            {
+                for (int j = 0; j < input[i].Count; j++)
+                {
+                    ghData.Append(new GH_Number(input[i][j]), path.AppendElement(i));
+                }
+            }
+            return ghData;
         }
 
         #endregion
