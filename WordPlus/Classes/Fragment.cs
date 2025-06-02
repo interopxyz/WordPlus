@@ -13,6 +13,7 @@ namespace WordPlus
 
         public string Text = string.Empty;
         public string Hyperlink = string.Empty;
+        public int Tabs = 0;
         protected Font font = Fonts.Normal;
         protected Graphic graphic = Graphics.Outline;
 
@@ -27,6 +28,7 @@ namespace WordPlus
             this.Text = fragment.Text;
             this.Hyperlink = fragment.Hyperlink;
             this.font = new Font(fragment.font);
+            this.Tabs = fragment.Tabs;
             this.graphic = new Graphic(fragment.graphic);
         }
 
@@ -45,6 +47,11 @@ namespace WordPlus
         {
             this.Text = text;
             this.font = new Font(font);
+        }
+
+        public bool HasTabs
+        {
+            get { return this.Tabs > 0; }
         }
 
         #endregion
@@ -74,8 +81,15 @@ namespace WordPlus
 
         public override string ToString()
         {
-            if (this.Text.Length < 16) return "Wd | Fragment {" + this.Text + "}";
-            return "WD | Fragment {" + this.Text.Substring(0, 15) + "...}";
+            if (this.Text != null)
+            {
+                if (this.Text.Length < 16) return "Wd | Fragment {" + this.Text + "}";
+                return "WD | Fragment {" + this.Text.Substring(0, 15) + "...}";
+            }
+            else
+            {
+                return "WD | Fragment {empty}";
+            }
         }
 
         #endregion

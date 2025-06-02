@@ -103,6 +103,16 @@ namespace WordPlus.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap WD_Con_Chart_De {
+            get {
+                object obj = ResourceManager.GetObject("WD_Con_Chart_De", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap WD_Con_Chart_Line {
             get {
                 object obj = ResourceManager.GetObject("WD_Con_Chart_Line", resourceCulture);
@@ -153,6 +163,16 @@ namespace WordPlus.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap WD_Con_Image_De {
+            get {
+                object obj = ResourceManager.GetObject("WD_Con_Image_De", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap WD_Con_LineBreak {
             get {
                 object obj = ResourceManager.GetObject("WD_Con_LineBreak", resourceCulture);
@@ -166,6 +186,16 @@ namespace WordPlus.Properties {
         internal static System.Drawing.Bitmap WD_Con_List {
             get {
                 object obj = ResourceManager.GetObject("WD_Con_List", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WD_Con_List_De {
+            get {
+                object obj = ResourceManager.GetObject("WD_Con_List_De", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,9 +233,29 @@ namespace WordPlus.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap WD_Con_Table_De {
+            get {
+                object obj = ResourceManager.GetObject("WD_Con_Table_De", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap WD_Con_Text {
             get {
                 object obj = ResourceManager.GetObject("WD_Con_Text", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WD_Con_Text_De {
+            get {
+                object obj = ResourceManager.GetObject("WD_Con_Text_De", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -226,6 +276,16 @@ namespace WordPlus.Properties {
         internal static System.Drawing.Bitmap WD_Doc_Columns {
             get {
                 object obj = ResourceManager.GetObject("WD_Doc_Columns", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WD_Doc_Content {
+            get {
+                object obj = ResourceManager.GetObject("WD_Doc_Content", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -356,6 +416,16 @@ namespace WordPlus.Properties {
         internal static System.Drawing.Bitmap WD_Doc_Modify_FontStyle {
             get {
                 object obj = ResourceManager.GetObject("WD_Doc_Modify_FontStyle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WD_Doc_Modify_Indentation {
+            get {
+                object obj = ResourceManager.GetObject("WD_Doc_Modify_Indentation", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

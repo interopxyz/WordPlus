@@ -260,7 +260,7 @@ namespace WordPlus
             }
         }
 
-        public static Font Normal { get { return new Font("Normal", "Arial", 11, Sd.Color.Black); } }
+        public static Font Normal { get { return new Font("Normal", "Arial", 12, Sd.Color.Black); } }
         public static Font Title { get { return new Font("Title", "Arial", 26, Sd.Color.Black); } }
         public static Font Subtitle { get { return new Font("Subtitle", "Arial", 15, Sd.Color.DarkGray); } }
         public static Font Heading1 { get { return new Font("Heading1", "Arial", 20, Sd.Color.Black); } }

@@ -2,33 +2,32 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using Sd = System.Drawing;
-
 namespace WordPlus.Components
 {
-    public class GH_WD_Con_Image : GH_Component
+    public class GH_WD_Con_De_Table : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GH_WB_Con_Image class.
+        /// Initializes a new instance of the GH_WD_Con_De_Table class.
         /// </summary>
-        public GH_WD_Con_Image()
-          : base("Word Image Content", "WD Img",
-              "Construct a Word Image Content Object",
+        public GH_WD_Con_De_Table()
+          : base("Deconstruct Word Table Contents", "WD De Tbl",
+              "DeConstruct a Word Table Content Object",
               Constants.ShortName, Constants.SubContent)
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.septenary;
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Image", "I", "A System Drawing Bitmap or full FilePath to an image file", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Table " + Constants.Content.Name, Constants.Content.NickName, "Table " + Constants.Content.Input, GH_ParamAccess.item);
             pManager[0].Optional = false;
         }
 
@@ -37,7 +36,7 @@ namespace WordPlus.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter(Constants.Content.Name, Constants.Content.NickName, Constants.Content.Output, GH_ParamAccess.item);
+            pManager.AddGenericParameter(Constants.Paragraph.Name, Constants.Paragraph.NickName, Constants.Paragraph.Input, GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -46,39 +45,34 @@ namespace WordPlus.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            string warning = "I input must be a System Drawing Bitmap or a full file path to an image file";
             IGH_Goo gooA = null;
-            if (!DA.GetData(0, ref gooA)) return;
-
-            bool isValid = false;
-            if (gooA.CastTo<Sd.Bitmap>(out Sd.Bitmap image)) isValid = true;
-
-            if (!isValid)
+            if (DA.GetData(0, ref gooA))
             {
-                if (gooA.CastTo<string>(out string filepath))
+                if (!gooA.CastTo<Content>(out Content content))
                 {
-                    if (System.IO.File.Exists(filepath))
-                    {
-                        image = new Sd.Bitmap(filepath);
-                        isValid = true;
-                    }
-                    else
-                    {
-                        this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, warning);
-                        return;
-                    }
+                    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Con input must be a Table Content Object");
+                    return;
                 }
                 else
                 {
-                    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, warning);
-                    return;
-                }
-            }
+                    if (content.ContentType == Content.ContentTypes.Table)
+                    {
 
-            if (isValid)
-            {
-                Content content = Content.CreateImageContent(image);
-                DA.SetData(0, content);
+                        GH_Path path = new GH_Path();
+
+                        if (this.Params.Input[0].VolatileData.PathCount > 1) path = this.Params.Input[0].VolatileData.get_Path(this.RunCount - 1);
+                        path = path.AppendElement(this.RunCount - 1);
+
+                        GH_Structure<GH_ObjectWrapper> data = content.Contents.ToDataTree(path);
+
+                        DA.SetDataTree(0, data);
+                    }
+                    else
+                    {
+                        this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Con input must be a Table Content Object");
+                        return;
+                    }
+                }
             }
 
         }
@@ -92,7 +86,7 @@ namespace WordPlus.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Properties.Resources.WD_Con_Image;
+                return Properties.Resources.WD_Con_Table_De;
             }
         }
 
@@ -101,7 +95,7 @@ namespace WordPlus.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1C136C5C-5832-4864-B33C-0180CA507C9A"); }
+            get { return new Guid("CAF1B862-5ABB-4D20-B836-5451649BAF7B"); }
         }
     }
 }
